@@ -3,6 +3,8 @@ import {
   Scene,
   WebGLRenderer,
   PointLight,
+  AmbientLight,
+  DirectionalLight,
   Group,
   Vector3,
 } from 'three'
@@ -11,7 +13,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import EarthMoonSystem from './components/EarthMoonSystem'
 import './App.css'
 
-let renderer, camera, controls, scene
+let renderer, camera, controls, scene, ambientLight, directionalLight
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
@@ -23,7 +25,7 @@ function init() {
     canvas,
     antialias: true
   })
-  renderer.setClearColor('#e5e5e5')
+  renderer.setClearColor('#000000')
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(screenWidth, screenHeight)
   document.body.appendChild(renderer.domElement)
@@ -36,11 +38,18 @@ function init() {
   controls = new TrackballControls(camera, canvas)
   controls.addEventListener('change', render)
 
-  // SCENE
-  scene = new Scene()
-
+  // LIGHTS
+  ambientLight = new AmbientLight(0xffffff, 0.2)
+  directionalLight = new DirectionalLight(0xffffff, 1)
+  directionalLight.position.set(-20,0,0)
+  
   // RESIZE LISTENER
   window.addEventListener('resize', onWindowResize, false)
+  
+  // SCENE
+  scene = new Scene()
+  scene.add(ambientLight)
+  scene.add(directionalLight)
 }
 
 let angle = 0
