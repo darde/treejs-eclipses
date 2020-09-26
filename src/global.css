@@ -8,6 +8,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -25,6 +29,8 @@ canvas {
 
 #controls {
   position: fixed;
-  bottom: 0;
   left: 0;
+  top: calc(50% - 300px);
+  height: 100%;
+  max-height: 600px;
 }
