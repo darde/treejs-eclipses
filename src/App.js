@@ -1,42 +1,139 @@
-import React from 'react'
-import { PerspectiveCamera, Scene, WebGLRenderer, PointLight } from 'three'
-import Sphere from './components/primitives/Sphere'
-import Box from './components/primitives/Box'
+import {
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+  PointLight,
+  Group,
+  Vector3,
+} from 'three'
+import Controls from './components/Controls'
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+import EarthMoonSystem from './components/EarthMoonSystem'
 import './App.css'
 
-const renderer = new WebGLRenderer({ antialias: true })
-const scene = new Scene()
-const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+let renderer, camera, controls, scene
+const screenWidth = window.innerWidth
+const screenHeight = window.innerHeight
 
-const light = new PointLight(0xFFFFFF, 1, 500)
-light.position.set(10,0,25)
-scene.add(light)
+function init() {
+  const canvas = document.getElementById('canvas')
 
-camera.position.z = 5
-
-function App({ screenWidth, screenHeight }) {
-  const appRef = React.useRef()
-  
+  // RENDERER
+  renderer = new WebGLRenderer({
+    canvas,
+    antialias: true
+  })
   renderer.setClearColor('#e5e5e5')
+  renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(screenWidth, screenHeight)
+  document.body.appendChild(renderer.domElement)
 
-  React.useEffect(() => {
-    appRef.current.appendChild(renderer.domElement)
-  }, [])
+  // CAMERA
+  camera = new PerspectiveCamera(80, screenWidth / screenHeight, 0.1, 1000)
+  camera.position.z = 5
 
-  React.useEffect(() => {
-    renderer.setSize(screenWidth, screenHeight)
-    camera.aspect = screenWidth / screenHeight
-    camera.updateProjectionMatrix()
-    renderer.render(scene, camera)
-  }, [screenWidth, screenHeight])
+  // CONTROLS
+  controls = new TrackballControls(camera, canvas)
+  controls.addEventListener('change', render)
 
-  return (
-    <div className="App" ref={appRef}>
-      <Sphere scene={scene} />
-      <Box scene={scene} position={[2, 0, -1]} />
-    </div>
-  );
+  // SCENE
+  scene = new Scene()
+
+  // RESIZE LISTENER
+  window.addEventListener('resize', onWindowResize, false)
 }
+
+let angle = 0
+
+function animate() {
+  window.requestAnimationFrame(animate)
+  render()
+  angle = angle > 359 ? 0 : angle + 0.2
+  EarthMoonSystem.animateMoon(angle)
+  EarthMoonSystem.animateEarth(0.01)
+  controls.update()
+}
+
+function render() {
+  renderer.render(scene, camera)
+}
+
+function resetCamera() {
+  camera.position.set(0,0,5)
+}
+
+function onWindowResize() {
+  const screenWidth = window.innerWidth
+  const screenHeight = window.innerHeight
+
+  renderer.setSize(screenWidth, screenHeight)
+  camera.aspect = screenWidth / screenHeight
+  camera.updateProjectionMatrix()
+  controls.handleResize()
+}
+
+function App() {
+  init()
+  animate()
+  scene.add(EarthMoonSystem.system)
+
+  return {
+    handleResetCamera: resetCamera
+  }
+}
+
+// const light = new PointLight(0xFFFFFF, 1, 500)
+// light.position.set(10,0,25)
+// scene.add(light)
+
+// function App({ screenWidth, screenHeight }) {
+
+//   document.body.appendChild(renderer.domElement)
+  
+  // const earthRotation = [0, 0, 0]
+  // const earth = Earth()
+
+  // const moon = Moon()
+  // moon.position.set(3,0,0)
+  // const moonAxis = new Vector3(0, 0, 0).normalize()
+  // const groupMoon = new Group()
+  // groupMoon.rotateOnAxis(moonAxis, degToRad(0))
+  // groupMoon.add(moon)
+  
+  // const groupEarth = new Group()
+  // const earthAxis = new Vector3(0, 0, degToRad(-23.44)).normalize()
+  // // groupEarth.rotateOnAxis(earthAxis, degToRad(23.44))
+  // groupEarth.add(earth)
+  
+
+  // const systemEarthMoon = new Group()
+  // const systemEarthMoonAxis = new Vector3(0,0,0)
+  // systemEarthMoon.rotateOnAxis(systemEarthMoonAxis, degToRad(0))
+  // systemEarthMoon.add(groupMoon)
+  // systemEarthMoon.add(groupEarth)
+  // scene.add(systemEarthMoon)
+
+  // function render() {
+  //   requestAnimationFrame(render)
+  //   renderer.setSize(screenWidth, screenHeight)
+  //   camera.aspect = screenWidth / screenHeight
+  //   camera.updateProjectionMatrix()
+
+
+    
+  //   // earthRotation[1] = earthRotation[1] -= 0.01
+  //   // earth.rotation.y = earthRotation[1]
+
+  //   // systemEarthMoon.rotation.y += 0.005
+    
+  //   renderer.render(scene, camera)
+  // }
+  
+  // render()
+  
+  
+
+//   return true
+// }
 
 export default App

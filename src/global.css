@@ -16,3 +16,15 @@ code {
 canvas {
   display: block;
 }
+
+#root {
+  position: fixed;
+  bottom: 0;
+  z-index: 5;
+}
+
+#controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
