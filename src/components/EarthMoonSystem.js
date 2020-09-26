@@ -9,14 +9,18 @@ function EarthMoonSystem() {
   const earthMoonSystemAxis = new Vector3(0, 0, 0)
   earthMoonSystem.rotateOnAxis(earthMoonSystemAxis, degToRad(0))
   const earth = Earth.system
-  Moon.position.x = orbitRadius
+  const moon = Moon.system
+  moon.position.x = orbitRadius
+  earth.position.set(0,0,0)
+  moon.position.set(1,0,0)
   earthMoonSystem.add(earth)
-  earthMoonSystem.add(Moon)
+  earthMoonSystem.add(moon)
 
 
   function animateMoon(angle) {
-    Moon.position.x = orbitRadius * Math.cos(-degToRad(angle))
-    Moon.position.z = orbitRadius * Math.sin(-degToRad(angle))
+    moon.position.x = orbitRadius * Math.cos(-degToRad(angle))
+    moon.position.z = orbitRadius * Math.sin(-degToRad(angle))
+    Moon.rotateMoon(angle)
   }
 
   function animateEarth(increment) {

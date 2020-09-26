@@ -2,15 +2,12 @@ import {
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
-  PointLight,
   AmbientLight,
   DirectionalLight,
-  Group,
-  Vector3,
 } from 'three'
-import Controls from './components/Controls'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import EarthMoonSystem from './components/EarthMoonSystem'
+import Skybox from './components/Skybox'
 import './App.css'
 
 let renderer, camera, controls, scene, ambientLight, directionalLight
@@ -33,7 +30,7 @@ function init() {
   // CAMERA
   camera = new PerspectiveCamera(80, screenWidth / screenHeight, 0.1, 1000)
   camera.position.z = 5
-
+  
   // CONTROLS
   controls = new TrackballControls(camera, canvas)
   controls.addEventListener('change', render)
@@ -41,7 +38,7 @@ function init() {
   // LIGHTS
   ambientLight = new AmbientLight(0xffffff, 0.2)
   directionalLight = new DirectionalLight(0xffffff, 1)
-  directionalLight.position.set(-20,0,0)
+  directionalLight.position.set(-40,0,0)
   
   // RESIZE LISTENER
   window.addEventListener('resize', onWindowResize, false)
@@ -84,6 +81,7 @@ function onWindowResize() {
 function App() {
   init()
   animate()
+  scene.add(Skybox)
   scene.add(EarthMoonSystem.system)
 
   return {
