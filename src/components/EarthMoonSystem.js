@@ -17,13 +17,14 @@ function EarthMoonSystem() {
   earthMoonSystem.add(moon)
 
 
-  function animateMoon(angle) {
+  function animateMoon(angle) { // degrees
     moon.position.x = orbitRadius * Math.cos(-degToRad(angle))
     moon.position.z = orbitRadius * Math.sin(-degToRad(angle))
     Moon.rotateMoon(angle)
   }
 
   function animateEarth(increment) {
+    
     Earth.rotateEarth(increment)
   }
 

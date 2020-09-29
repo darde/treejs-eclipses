@@ -8,9 +8,14 @@ import {
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import EarthMoonSystem from './components/EarthMoonSystem'
 import Skybox from './components/Skybox'
+import Ecliptic from './components/Ecliptic'
+import { degToRad } from './components/helpers'
 import './App.css'
 
 let renderer, camera, controls, scene, ambientLight, directionalLight
+let earthRotationAngle = 0,
+  moonTranslationAngle = 0
+
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
@@ -29,7 +34,8 @@ function init() {
 
   // CAMERA
   camera = new PerspectiveCamera(80, screenWidth / screenHeight, 0.1, 1000)
-  camera.position.z = 5
+  camera.position.set(0,1,5)
+  camera.rotation.set(degToRad(15),0,0)
   
   // CONTROLS
   controls = new TrackballControls(camera, canvas)
@@ -49,14 +55,35 @@ function init() {
   scene.add(directionalLight)
 }
 
-let angle = 0
+const moontTranslationIncrement = Number(1 / 27.3)
+let days = 0
+let moonTranslation = 0
+
+function animateEarthMoonSystem() {
+  if (earthRotationAngle > 359) {
+    earthRotationAngle = 0
+    days += 1
+    console.log('dias: ', days)
+    console.log('moon angle: ', moonTranslationAngle)
+  } else {
+    earthRotationAngle += 1
+    moonTranslationAngle = Number(moonTranslationAngle + moontTranslationIncrement)
+  }
+
+  if (moonTranslationAngle > 359) {
+    moonTranslationAngle = 0
+    moonTranslation += 1
+    console.log('translações lunar: ', moonTranslation)
+  }
+
+  EarthMoonSystem.animateMoon(moonTranslationAngle)
+  EarthMoonSystem.animateEarth(earthRotationAngle)
+}
 
 function animate() {
   window.requestAnimationFrame(animate)
   render()
-  angle = angle > 359 ? 0 : angle + 0.2
-  EarthMoonSystem.animateMoon(angle)
-  EarthMoonSystem.animateEarth(0.01)
+  animateEarthMoonSystem()
   controls.update()
 }
 
@@ -83,6 +110,7 @@ function App() {
   animate()
   scene.add(Skybox)
   scene.add(EarthMoonSystem.system)
+  scene.add(Ecliptic.system)
 
   return {
     handleResetCamera: resetCamera
