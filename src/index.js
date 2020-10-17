@@ -7,7 +7,10 @@ import Controls from './components/Controls'
 App()
 
 ReactDOM.render(
-  <Controls handleOnPress={() => App().handleResetCamera()} />,
+  <Controls
+    handleOnPress={() => App().handleResetCamera()}
+    handleAnimationSpeed={(value) => App().handleAnimationSpeed(value)}
+  />,
   document.querySelector('#root')
 )
 

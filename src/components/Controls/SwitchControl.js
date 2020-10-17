@@ -6,7 +6,7 @@ import { shade } from 'polished'
 const SwitchContainer = styled.label`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
 
   span {

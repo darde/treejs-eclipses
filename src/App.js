@@ -63,8 +63,8 @@ function animateEarthMoonSystem() {
   if (earthRotationAngle > 359) {
     earthRotationAngle = 0
     days += 1
-    console.log('dias: ', days)
-    console.log('moon angle: ', moonTranslationAngle)
+    // console.log('dias: ', days)
+    // console.log('moon angle: ', moonTranslationAngle)
   } else {
     earthRotationAngle += 1
     moonTranslationAngle = Number(moonTranslationAngle + moontTranslationIncrement)
@@ -73,7 +73,7 @@ function animateEarthMoonSystem() {
   if (moonTranslationAngle > 359) {
     moonTranslationAngle = 0
     moonTranslation += 1
-    console.log('translações lunar: ', moonTranslation)
+    // console.log('translações lunar: ', moonTranslation)
   }
 
   EarthMoonSystem.animateMoon(moonTranslationAngle)
@@ -105,6 +105,10 @@ function onWindowResize() {
   controls.handleResize()
 }
 
+function handleAnimationSpeed(value) {
+  console.log(value)
+}
+
 function App() {
   init()
   animate()
@@ -113,7 +117,8 @@ function App() {
   scene.add(Ecliptic.system)
 
   return {
-    handleResetCamera: resetCamera
+    handleResetCamera: resetCamera,
+    handleAnimationSpeed,
   }
 }
 

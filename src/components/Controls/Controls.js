@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { css } from 'styled-components'
 import SwitchControl from './SwitchControl'
-import { faCoffee, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
+import Slider from './Slider'
+import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '../fontawesome'
 
@@ -70,7 +71,12 @@ const ToggleButton = styled.button`
   height: 50px;
 `
 
-function Controls({ handleOnPress }) {
+const ControlItem = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
+`
+
+function Controls({ handleOnPress, handleAnimationSpeed }) {
   const [open, setOpen] = useState(true)
 
   return ReactDOM.createPortal(
@@ -85,11 +91,23 @@ function Controls({ handleOnPress }) {
           />
         </ToggleButton>
       </ToogleButtonContainer>
-      <SwitchControl
-        label="Eclíptica"
-        handleOnChange={() => {}}
-        id="ecliptica"
-      />
+      <ControlItem>
+        <SwitchControl
+          label="Eclíptica"
+          handleOnChange={() => {}}
+          id="ecliptica"
+        />
+      </ControlItem>
+      <ControlItem>
+        <Slider
+          label={'Velocidade da animação'}
+          width={150}
+          min={1}
+          max={100}
+          step={5}
+          handleAnimationSpeed={handleAnimationSpeed}
+        />
+      </ControlItem>
     </PanelContainer>,
     document.querySelector('#controls')  
   )
