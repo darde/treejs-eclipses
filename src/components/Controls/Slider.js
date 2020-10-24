@@ -46,7 +46,7 @@ function Slider({ width = 100, min = 1, max = 100, step = 1, label, graduationLa
   const handleOnMouseUp = (e) => {
     handleAnimationSpeed(value)
   }
-console.log('render')
+
   return (
     <SliderContainer>
       <Label>{label}</Label>

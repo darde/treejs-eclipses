@@ -1,19 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './global.css';
-import App, { handleAnimationSpeed, resetCamera } from './App';
+import App, { handleAnimationSpeed, resetCamera, handleFreeCamera, setCameraPosition } from './App';
 import Controls from './components/Controls'
 
-App((day) => {
-  render(day)
+let freeCamera = false
+
+App((day, _freeCamera) => {
+  if (_freeCamera !== freeCamera) {
+    freeCamera = _freeCamera
+  }
+  
+  render(day, freeCamera)
 })
 
 const container = document.querySelector('#root')
 
-function render(day) {
+function render(day, freeCamera) {
   ReactDOM.render(
     <Controls
       day={day}
+      customCameraPosition={freeCamera}
+      handleFreeCamera={handleFreeCamera}
       handleOnPress={() => resetCamera()}
       handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
     />,
@@ -21,4 +29,4 @@ function render(day) {
   )
 }
 
-render(1)
+render(1, freeCamera)

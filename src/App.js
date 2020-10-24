@@ -18,8 +18,14 @@ let earthRotationAngle = 0,
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
+const moontTranslationIncrement = Number(1 / 27.3)
+let day = 1
+let freeCamera = false
+let moonTranslation = 0
+let speedAnimation = 1
+let updateAnimationProperties
 
-function init() {
+function init(updateAnimationProperties) {
   const canvas = document.getElementById('canvas')
 
   // RENDERER
@@ -40,6 +46,10 @@ function init() {
   // CONTROLS
   controls = new TrackballControls(camera, canvas)
   controls.addEventListener('change', render)
+  controls.addEventListener('start', () => {
+    freeCamera = true
+    updateAnimationProperties(day, freeCamera)
+  })
 
   // LIGHTS
   ambientLight = new AmbientLight(0xffffff, 0.2)
@@ -55,28 +65,19 @@ function init() {
   scene.add(directionalLight)
 }
 
-const moontTranslationIncrement = Number(1 / 27.3)
-let day = 1
-let moonTranslation = 0
-let speedAnimation = 1
-let getDay
-
 function animateEarthMoonSystem() {
   if (earthRotationAngle > 359) {
     earthRotationAngle = 0
     day = day >= 27 ? 1 : day + 1
-    getDay(day)
-    // console.log('moon angle: ', moonTranslationAngle)
+    updateAnimationProperties(day, freeCamera)
   } else {
     earthRotationAngle += 1 * speedAnimation
-    // moonTranslationAngle = Number(moonTranslationAngle + moontTranslationIncrement)
     moonTranslationAngle = Number(moonTranslationAngle + (moontTranslationIncrement * speedAnimation) )
   }
   
   if (moonTranslationAngle === 359) {
     moonTranslationAngle = 0
     moonTranslation += 1
-    // console.log('translações lunar: ', moonTranslation)
   }
   
   EarthMoonSystem.animateMoon(moonTranslationAngle)
@@ -98,6 +99,24 @@ export const resetCamera = () => {
   camera.position.set(0,0,5)
 }
 
+const setCameraPosition = (position) => {
+  switch (position) {
+    case 'top':
+      camera.position.set(0, 5, 0)
+      break;
+    case 'left':
+      camera.position.set(0, 1, 5)
+      break;
+    case 'right':
+      // camera.position.set(0, 1, -5)
+      camera.position.set(5, 1, 0)
+      break;
+    default:
+      camera.position.set(0, 1, 5)
+  }
+  // controls.reset()
+}
+
 function onWindowResize() {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
@@ -109,13 +128,20 @@ function onWindowResize() {
 }
 
 export const handleAnimationSpeed = (value) => {
-  // console.log(value)
   speedAnimation = value
 }
 
-function App(getDayCallback) {
-  getDay = getDayCallback
-  init()
+export const handleFreeCamera = (value, position) => {
+  console.log('value: ', value)
+  setCameraPosition(position)
+  freeCamera = value
+  updateAnimationProperties(day, freeCamera)
+}
+
+function App(updatePropertiesCallback) {
+  updateAnimationProperties = updatePropertiesCallback
+  
+  init(updateAnimationProperties)
   animate()
   scene.add(Skybox)
   scene.add(EarthMoonSystem.system)

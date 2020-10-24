@@ -5,6 +5,8 @@ import SwitchControl from './SwitchControl'
 import Slider from './Slider'
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CameraControls from './CameraControls'
+import Fieldset from '../Fieldset'
 import '../fontawesome'
 
 const PanelContainer = styled.div`
@@ -79,9 +81,8 @@ const ControlItem = styled.div`
 const ContainerInfo = styled.div`
   display: flex;
   align-items: center;
+  font-size: 13px;
   justify-content: flex-end;
-  border-top: 1px solid white;
-  padding-top: 15px;
 `
 
 const LabelInfo = styled.label`
@@ -90,8 +91,8 @@ const LabelInfo = styled.label`
 `
 
 const InputInfo = styled.div`
-  height: 30px;
-  padding: 0 20px;
+  height: 25x;
+  padding: 3px 10px;
   display: flex;
   place-items: center;
   border: 1px solid white;
@@ -99,7 +100,7 @@ const InputInfo = styled.div`
   color: white
 `
 
-function Controls({ handleOnPress, handleAnimationSpeed, day }) {
+function Controls({ customCameraPosition, handleAnimationSpeed, day, handleFreeCamera }) {
   const [open, setOpen] = useState(true)
 
   return ReactDOM.createPortal(
@@ -134,10 +135,28 @@ function Controls({ handleOnPress, handleAnimationSpeed, day }) {
         />
       </ControlItem>
       <ControlItem>
-        <ContainerInfo>
-          <LabelInfo>Dia</LabelInfo>
-          <InputInfo>{day}</InputInfo>
-        </ContainerInfo>
+        <Fieldset legend={'Câmera'}>
+          <CameraControls
+            customCameraPosition={customCameraPosition}
+            handleFreeCamera={handleFreeCamera}
+          />
+        </Fieldset>
+      </ControlItem>
+      <ControlItem>
+        <Fieldset legend={'Terra'}>
+          <ContainerInfo>
+            <LabelInfo>Dia</LabelInfo>
+            <InputInfo>{day}</InputInfo>
+          </ContainerInfo>
+        </Fieldset>
+      </ControlItem>
+      <ControlItem>
+        <Fieldset legend={'Lua'}>
+          <ContainerInfo>
+            <LabelInfo>Fase</LabelInfo>
+            <InputInfo>{day}</InputInfo>
+          </ContainerInfo>
+        </Fieldset>
       </ControlItem>
     </PanelContainer>,
     document.querySelector('#controls')  
