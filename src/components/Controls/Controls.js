@@ -102,11 +102,16 @@ function Controls({ handleOnPress, handleAnimationSpeed }) {
         <Slider
           label={'Velocidade da animação'}
           width={150}
-          min={1}
-          max={100}
-          step={5}
+          min={0}
+          max={10}
+          value={2}
+          step={2}
+          graduationLabels={[0,1,2,3,4,5]}
           handleAnimationSpeed={handleAnimationSpeed}
         />
+      </ControlItem>
+      <ControlItem>
+        <span>Dias:</span>
       </ControlItem>
     </PanelContainer>,
     document.querySelector('#controls')  

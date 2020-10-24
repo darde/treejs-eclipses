@@ -58,24 +58,26 @@ function init() {
 const moontTranslationIncrement = Number(1 / 27.3)
 let days = 0
 let moonTranslation = 0
+let speedAnimation = 1
 
 function animateEarthMoonSystem() {
   if (earthRotationAngle > 359) {
     earthRotationAngle = 0
     days += 1
-    // console.log('dias: ', days)
     // console.log('moon angle: ', moonTranslationAngle)
   } else {
-    earthRotationAngle += 1
-    moonTranslationAngle = Number(moonTranslationAngle + moontTranslationIncrement)
+    earthRotationAngle += 1 * speedAnimation
+    // moonTranslationAngle = Number(moonTranslationAngle + moontTranslationIncrement)
+    moonTranslationAngle = Number(moonTranslationAngle + (moontTranslationIncrement * speedAnimation) )
   }
-
+  
   if (moonTranslationAngle > 359) {
     moonTranslationAngle = 0
     moonTranslation += 1
     // console.log('translações lunar: ', moonTranslation)
   }
-
+  
+  // console.log('dias: ', days)
   EarthMoonSystem.animateMoon(moonTranslationAngle)
   EarthMoonSystem.animateEarth(earthRotationAngle)
 }
@@ -91,7 +93,7 @@ function render() {
   renderer.render(scene, camera)
 }
 
-function resetCamera() {
+export const resetCamera = () => {
   camera.position.set(0,0,5)
 }
 
@@ -105,8 +107,9 @@ function onWindowResize() {
   controls.handleResize()
 }
 
-function handleAnimationSpeed(value) {
-  console.log(value)
+export const handleAnimationSpeed = (value) => {
+  // console.log(value)
+  speedAnimation = value
 }
 
 function App() {
@@ -115,11 +118,6 @@ function App() {
   scene.add(Skybox)
   scene.add(EarthMoonSystem.system)
   scene.add(Ecliptic.system)
-
-  return {
-    handleResetCamera: resetCamera,
-    handleAnimationSpeed,
-  }
 }
 
 // const light = new PointLight(0xFFFFFF, 1, 500)
