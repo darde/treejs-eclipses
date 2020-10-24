@@ -4,13 +4,21 @@ import './global.css';
 import App, { handleAnimationSpeed, resetCamera } from './App';
 import Controls from './components/Controls'
 
-App()
+App((day) => {
+  render(day)
+})
 
-ReactDOM.render(
-  <Controls
-    handleOnPress={() => resetCamera()}
-    handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
-  />,
-  document.querySelector('#root')
-)
+const container = document.querySelector('#root')
 
+function render(day) {
+  ReactDOM.render(
+    <Controls
+      day={day}
+      handleOnPress={() => resetCamera()}
+      handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
+    />,
+    container
+  )
+}
+
+render(1)

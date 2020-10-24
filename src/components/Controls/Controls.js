@@ -76,7 +76,30 @@ const ControlItem = styled.div`
   margin-bottom: 20px;
 `
 
-function Controls({ handleOnPress, handleAnimationSpeed }) {
+const ContainerInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid white;
+  padding-top: 15px;
+`
+
+const LabelInfo = styled.label`
+  margin-right: 10px;
+  color: white;
+`
+
+const InputInfo = styled.div`
+  height: 30px;
+  padding: 0 20px;
+  display: flex;
+  place-items: center;
+  border: 1px solid white;
+  border-radius: 4px;
+  color: white
+`
+
+function Controls({ handleOnPress, handleAnimationSpeed, day }) {
   const [open, setOpen] = useState(true)
 
   return ReactDOM.createPortal(
@@ -111,7 +134,10 @@ function Controls({ handleOnPress, handleAnimationSpeed }) {
         />
       </ControlItem>
       <ControlItem>
-        <span>Dias:</span>
+        <ContainerInfo>
+          <LabelInfo>Dia</LabelInfo>
+          <InputInfo>{day}</InputInfo>
+        </ContainerInfo>
       </ControlItem>
     </PanelContainer>,
     document.querySelector('#controls')  

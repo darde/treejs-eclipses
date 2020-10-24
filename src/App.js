@@ -56,14 +56,16 @@ function init() {
 }
 
 const moontTranslationIncrement = Number(1 / 27.3)
-let days = 0
+let day = 1
 let moonTranslation = 0
 let speedAnimation = 1
+let getDay
 
 function animateEarthMoonSystem() {
   if (earthRotationAngle > 359) {
     earthRotationAngle = 0
-    days += 1
+    day = day >= 27 ? 1 : day + 1
+    getDay(day)
     // console.log('moon angle: ', moonTranslationAngle)
   } else {
     earthRotationAngle += 1 * speedAnimation
@@ -71,13 +73,12 @@ function animateEarthMoonSystem() {
     moonTranslationAngle = Number(moonTranslationAngle + (moontTranslationIncrement * speedAnimation) )
   }
   
-  if (moonTranslationAngle > 359) {
+  if (moonTranslationAngle === 359) {
     moonTranslationAngle = 0
     moonTranslation += 1
     // console.log('translações lunar: ', moonTranslation)
   }
   
-  // console.log('dias: ', days)
   EarthMoonSystem.animateMoon(moonTranslationAngle)
   EarthMoonSystem.animateEarth(earthRotationAngle)
 }
@@ -112,7 +113,8 @@ export const handleAnimationSpeed = (value) => {
   speedAnimation = value
 }
 
-function App() {
+function App(getDayCallback) {
+  getDay = getDayCallback
   init()
   animate()
   scene.add(Skybox)
