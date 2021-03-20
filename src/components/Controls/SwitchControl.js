@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Switch from "react-switch";
 import { shade } from 'polished'
@@ -16,13 +16,20 @@ const SwitchContainer = styled.label`
   }
 `
 
-function SwitchControl({ label, handleOnChange, id }) {
+function SwitchControl({ label, callback, id }) {
+  const [checked, setChecked] = useState(false)
+
+  const handleChange = () => {
+    setChecked(!checked)
+    callback()
+  }
+
   return (
     <SwitchContainer htmlFor={id}>
       <span>{label}</span>
       <Switch
-        onChange={handleOnChange}
-        checked={false}
+        onChange={handleChange}
+        checked={checked}
         checkedIcon={false}
         uncheckedIcon={false}
         height={10}

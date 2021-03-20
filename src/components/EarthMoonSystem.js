@@ -10,9 +10,10 @@ function EarthMoonSystem() {
   earthMoonSystem.rotateOnAxis(earthMoonSystemAxis, degToRad(0))
   const earth = Earth.system
   const moon = Moon.system
-  moon.position.x = orbitRadius
+  // moon.position.x = orbitRadius
   earth.position.set(0,0,0)
-  moon.position.set(1,0,0)
+  // moon.position.set(1,0,0)
+  moon.position.set(orbitRadius,0,0)
   earthMoonSystem.add(earth)
   earthMoonSystem.add(moon)
 

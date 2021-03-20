@@ -2,19 +2,17 @@ import {
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
-  AmbientLight,
-  DirectionalLight,
+  AxesHelper,
 } from 'three'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import EarthMoonSystem from './components/EarthMoonSystem'
+import Sun from './components/Sun'
 import Skybox from './components/Skybox'
 import Ecliptic from './components/Ecliptic'
 import { degToRad } from './components/helpers'
 import './App.css'
 
-let renderer, camera, controls, scene, ambientLight, directionalLight
-let earthRotationAngle = 0,
-  moonTranslationAngle = 0
+let renderer, camera, controls, scene, directionalLight
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
@@ -22,11 +20,18 @@ const moontTranslationIncrement = Number(1 / 27.3)
 let day = 1
 let freeCamera = false
 let moonTranslation = 0
+let earthRotationAngle = 0
+let moonTranslationAngle = 0
+let sunAngle = 0
 let speedAnimation = 1
 let updateAnimationProperties
+let axesHelper
 
 function init(updateAnimationProperties) {
   const canvas = document.getElementById('canvas')
+
+  // HELPER
+  axesHelper = new AxesHelper(20)
 
   // RENDERER
   renderer = new WebGLRenderer({
@@ -52,17 +57,19 @@ function init(updateAnimationProperties) {
   })
 
   // LIGHTS
-  ambientLight = new AmbientLight(0xffffff, 0.2)
-  directionalLight = new DirectionalLight(0xffffff, 1)
-  directionalLight.position.set(-40,0,0)
+  // ambientLight = new AmbientLight(0xffffff, 0.2)
+  // directionalLight = new DirectionalLight(0xffffff, 1)
+  
+  // SETUP SUN
+  Sun.setPosition(-60, 0, 0)
   
   // RESIZE LISTENER
   window.addEventListener('resize', onWindowResize, false)
   
   // SCENE
   scene = new Scene()
-  scene.add(ambientLight)
-  scene.add(directionalLight)
+  // scene.add(ambientLight)
+  // scene.add(directionalLight)
 }
 
 function animateEarthMoonSystem() {
@@ -84,10 +91,21 @@ function animateEarthMoonSystem() {
   EarthMoonSystem.animateEarth(earthRotationAngle)
 }
 
+function animateSun() {
+  if (sunAngle < 359) {
+    sunAngle += 0.1
+  } else {
+    sunAngle = 0
+  }
+  
+  Sun.rotateSun(sunAngle)
+}
+
 function animate() {
   window.requestAnimationFrame(animate)
   render()
   animateEarthMoonSystem()
+  animateSun()
   controls.update()
 }
 
@@ -132,10 +150,14 @@ export const handleAnimationSpeed = (value) => {
 }
 
 export const handleFreeCamera = (value, position) => {
-  console.log('value: ', value)
   setCameraPosition(position)
   freeCamera = value
   updateAnimationProperties(day, freeCamera)
+}
+
+export const toggleEcliptic = () => {
+  Ecliptic.toggleEcliptic()
+  // Ecliptic.system.material.opacity = 0;
 }
 
 function App(updatePropertiesCallback) {
@@ -143,9 +165,12 @@ function App(updatePropertiesCallback) {
   
   init(updateAnimationProperties)
   animate()
+  // alignDirectionLightWithSun()
   scene.add(Skybox)
   scene.add(EarthMoonSystem.system)
   scene.add(Ecliptic.system)
+  scene.add(Sun.entity)
+  scene.add(axesHelper)
 }
 
 // const light = new PointLight(0xFFFFFF, 1, 500)

@@ -1,7 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './global.css';
-import App, { handleAnimationSpeed, resetCamera, handleFreeCamera, setCameraPosition } from './App';
+import App, { 
+  handleAnimationSpeed,
+  resetCamera,
+  handleFreeCamera,
+  setCameraPosition,
+  toggleEcliptic,
+ } from './App';
 import Controls from './components/Controls'
 
 let freeCamera = false
@@ -22,6 +28,7 @@ function render(day, freeCamera) {
       day={day}
       customCameraPosition={freeCamera}
       handleFreeCamera={handleFreeCamera}
+      toggleEcliptic={toggleEcliptic}
       handleOnPress={() => resetCamera()}
       handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
     />,

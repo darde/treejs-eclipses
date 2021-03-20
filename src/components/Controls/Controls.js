@@ -100,7 +100,13 @@ const InputInfo = styled.div`
   color: white
 `
 
-function Controls({ customCameraPosition, handleAnimationSpeed, day, handleFreeCamera }) {
+function Controls({
+  customCameraPosition,
+  handleAnimationSpeed,
+  day,
+  handleFreeCamera,
+  toggleEcliptic,
+ }) {
   const [open, setOpen] = useState(true)
 
   return ReactDOM.createPortal(
@@ -118,7 +124,7 @@ function Controls({ customCameraPosition, handleAnimationSpeed, day, handleFreeC
       <ControlItem>
         <SwitchControl
           label="Eclíptica"
-          handleOnChange={() => {}}
+          callback={toggleEcliptic}
           id="ecliptica"
         />
       </ControlItem>
