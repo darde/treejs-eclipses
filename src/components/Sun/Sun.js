@@ -9,18 +9,14 @@ import {
 import { degToRad } from '../helpers'
 import SunTexture from './textures/sun.jpeg'
 
-const geometry = new SphereGeometry(1, 32, 32)
+const geometry = new SphereGeometry(3.3, 32, 32)
 const material = new MeshPhongMaterial({
   emissive: new Color('#ffffff'),
-  // specular: new Color('#ffffff'),
   emissiveIntensity: 2,
   emissiveMap: new TextureLoader().load(SunTexture),
-  // combine: MixOperation,
   map: new TextureLoader().load(SunTexture),
 })
 const sun = new Mesh(geometry, material)
-
-// const pointLight = new PointLight(0xffffff, 1, 40, 2)
 const directionalLight = new DirectionalLight(0xffffff, 1)
 
 sun.add(directionalLight)

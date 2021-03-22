@@ -119,11 +119,7 @@ function handleState(state, action) {
         right: 'enabled',
       }
     default:
-      return {
-        top: 'disabled',
-        left: 'disabled',
-        right: 'disabled',
-      }
+      return initialState
   }
 }
 
