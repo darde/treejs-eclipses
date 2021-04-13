@@ -106,8 +106,18 @@ function Controls({
   day,
   handleFreeCamera,
   toggleEcliptic,
+  toggleMoonOrbit,
+  handleMoonDistance,
  }) {
   const [open, setOpen] = useState(true)
+  const [sunRadius, setSunRadius] = useState(-90)
+  const [moonDistance, setMoonDistance] = useState(5)
+
+  function handleMoon(e) {
+    setMoonDistance(e.target.value)
+
+    handleMoonDistance(e.target.value)
+  }
 
   return ReactDOM.createPortal(
     <PanelContainer open={open}>
@@ -126,6 +136,13 @@ function Controls({
           label="Eclíptica"
           callback={toggleEcliptic}
           id="ecliptica"
+        />
+      </ControlItem>
+      <ControlItem>
+        <SwitchControl
+          label="Órbita lunar"
+          callback={toggleMoonOrbit}
+          id="moonOrbit"
         />
       </ControlItem>
       <ControlItem>
@@ -163,6 +180,10 @@ function Controls({
             <InputInfo>{day}</InputInfo>
           </ContainerInfo>
         </Fieldset>
+      </ControlItem>
+      <ControlItem>
+        <label>Moon Distance</label>
+        <input defaultValue={moonDistance} type={'text'} onChange={handleMoon} />
       </ControlItem>
     </PanelContainer>,
     document.querySelector('#controls')  

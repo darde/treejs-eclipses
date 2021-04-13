@@ -17,6 +17,8 @@ const material = new MeshPhongMaterial({
   bumpScale: 0.005,
 })
 const moon = new Mesh(geometry, material)
+moon.castShadow = true
+moon.receiveShadow = true
 
 const moonSystem = new Group()
 const moonAxisX = new Vector3(degToRad(20), 0, 0).normalize()

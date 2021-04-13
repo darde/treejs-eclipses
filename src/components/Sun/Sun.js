@@ -4,12 +4,15 @@ import {
   Mesh,
   TextureLoader,
   DirectionalLight,
+  DirectionalLightHelper,
+  CameraHelper,
   Color,
+  SpotLight,
 } from 'three'
 import { degToRad } from '../helpers'
 import SunTexture from './textures/sun.jpeg'
 
-const geometry = new SphereGeometry(3.3, 32, 32)
+const geometry = new SphereGeometry(9.8, 32, 32)
 const material = new MeshPhongMaterial({
   emissive: new Color('#ffffff'),
   emissiveIntensity: 2,
@@ -17,16 +20,34 @@ const material = new MeshPhongMaterial({
   map: new TextureLoader().load(SunTexture),
 })
 const sun = new Mesh(geometry, material)
-const directionalLight = new DirectionalLight(0xffffff, 1)
 
-sun.add(directionalLight)
+const spotLight = new SpotLight(0xffffff, 1, 0, 60, 1, 1)
+spotLight.castShadow = true
+spotLight.shadow.mapSize.width = 4096;
+spotLight.shadow.mapSize.height = 4096;
+
+
+sun.add(spotLight)
+
+// const directionalLight = new DirectionalLight(0xffffff, 1)
+// directionalLight.castShadow = true
+
+// const lightHelper = new DirectionalLightHelper(directionalLight)
+// const helper = new CameraHelper(directionalLight.shadow.camera)
+
+// sun.add(helper)
+// sun.add(directionalLight)
+// sun.add(lightHelper)
 
 function rotateSun(angle = 0) {
   sun.rotation.y = degToRad(angle)
 }
 
 function setPosition(x = -10, y = 0, z = 0) {
+  console.log('sun: ', typeof x)
   sun.position.set(x, y, z)
+  // directionalLight.position.set(x, y, z)
+  spotLight.position.set(x, y, z)
 }
 
 function Sun() {

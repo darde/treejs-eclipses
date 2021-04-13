@@ -6,7 +6,9 @@ import App, {
   resetCamera,
   handleFreeCamera,
   setCameraPosition,
+  handleMoonDistance,
   toggleEcliptic,
+  toggleMoonOrbit,
  } from './App';
 import Controls from './components/Controls'
 
@@ -29,6 +31,8 @@ function render(day, freeCamera) {
       customCameraPosition={freeCamera}
       handleFreeCamera={handleFreeCamera}
       toggleEcliptic={toggleEcliptic}
+      toggleMoonOrbit={toggleMoonOrbit}
+      handleMoonDistance={handleMoonDistance}
       handleOnPress={() => resetCamera()}
       handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
     />,

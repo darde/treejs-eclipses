@@ -3,6 +3,7 @@ import {
   Scene,
   WebGLRenderer,
   AxesHelper,
+  PCFSoftShadowMap,
 } from 'three'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import EarthMoonSystem from './components/EarthMoonSystem'
@@ -41,12 +42,13 @@ function init(updateAnimationProperties) {
   renderer.setClearColor('#000000')
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(screenWidth, screenHeight)
+  renderer.shadowMap.enabled = true;
   document.body.appendChild(renderer.domElement)
 
   // CAMERA
   camera = new PerspectiveCamera(80, screenWidth / screenHeight, 0.1, 1000)
-  camera.position.set(0,1,5)
-  camera.rotation.set(degToRad(15),0,0)
+  camera.position.set(0,0,5)
+  // camera.rotation.set(degToRad(15),0,0)
   
   // CONTROLS
   controls = new TrackballControls(camera, canvas)
@@ -61,7 +63,7 @@ function init(updateAnimationProperties) {
   // directionalLight = new DirectionalLight(0xffffff, 1)
   
   // SETUP SUN
-  Sun.setPosition(-60, 0, 0)
+  Sun.setPosition(-170, 0, 0)
   
   // RESIZE LISTENER
   window.addEventListener('resize', onWindowResize, false)
@@ -98,7 +100,7 @@ function animateSun() {
     sunAngle = 0
   }
   
-  Sun.rotateSun(sunAngle)
+  // Sun.rotateSun(sunAngle)
 }
 
 function animate() {
@@ -123,26 +125,35 @@ const setCameraPosition = (position) => {
       camera.position.set(0, 5, 0)
       break;
     case 'left':
-      camera.position.set(0, 1, 5)
+      camera.position.set(0, 0, 5)
       break;
     case 'right':
       // camera.position.set(0, 1, -5)
-      camera.position.set(5, 1, 0)
+      camera.position.set(5, 0, 0)
       break;
     default:
-      camera.position.set(0, 1, 5)
+      camera.position.set(0, 0, 5)
   }
   // controls.reset()
 }
 
+
 function onWindowResize() {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
-
+  
   renderer.setSize(screenWidth, screenHeight)
   camera.aspect = screenWidth / screenHeight
   camera.updateProjectionMatrix()
   controls.handleResize()
+}
+
+export const handleMoonDistance = (valueX) => {
+  EarthMoonSystem.setMoonDistance(valueX)
+}
+
+export const toggleMoonOrbit = () => {
+  EarthMoonSystem.toggleMoonOrbit()
 }
 
 export const handleAnimationSpeed = (value) => {
@@ -157,7 +168,6 @@ export const handleFreeCamera = (value, position) => {
 
 export const toggleEcliptic = () => {
   Ecliptic.toggleEcliptic()
-  // Ecliptic.system.material.opacity = 0;
 }
 
 function App(updatePropertiesCallback) {
@@ -165,7 +175,7 @@ function App(updatePropertiesCallback) {
   
   init(updateAnimationProperties)
   animate()
-  // alignDirectionLightWithSun()
+
   scene.add(Skybox)
   scene.add(EarthMoonSystem.system)
   scene.add(Ecliptic.system)

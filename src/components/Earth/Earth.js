@@ -21,6 +21,8 @@ const material = new MeshPhongMaterial({
   specular: new Color('#444444')
 })
 const earthMesh = new Mesh(geometry, material)
+earthMesh.castShadow = true
+earthMesh.receiveShadow = true
 
 function Earth(color = 0x18B6EC) {
   const earthSystem = new Group()

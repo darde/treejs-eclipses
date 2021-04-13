@@ -1,13 +1,11 @@
-import Plane from './primitives/Plane'
+import Circle from './primitives/Circle'
 import { DoubleSide, Mesh, MeshBasicMaterial, CircleGeometry } from 'three'
 import { degToRad } from './helpers'
 
 function Ecliptic() {
-  const geometry = new CircleGeometry(90, 60, 0, 6.3)
-  const material = new MeshBasicMaterial({ wireframe: false, color: 0xffffff, side: DoubleSide })
-  material.transparent = true
-  material.opacity = 0
-  let plane = new Mesh(geometry, material)
+  let circle = Circle(90, 0xffffff, 0)
+  let plane = circle.entity
+  let material = circle.material
 
   plane.position.set(0, 0, 0)
   plane.rotation.set(degToRad(90), 0, 0)
