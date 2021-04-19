@@ -4,10 +4,14 @@ import styled, { css } from 'styled-components'
 import SwitchControl from './SwitchControl'
 import Slider from './Slider'
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import CameraControls from './CameraControls'
+import ControlItem from './ControlItem'
+import ContainerInfo from './ContainerInfo'
+import LabelInfo from './LabelInfo'
 import Fieldset from '../Fieldset'
 import '../fontawesome'
+import MoonPhaseDisplay from './MoonPhaseDisplay'
 
 const PanelContainer = styled.div`
   position: relative;
@@ -73,38 +77,13 @@ const ToggleButton = styled.button`
   height: 50px;
 `
 
-const ControlItem = styled.div`
-  width: 100%;
-  margin-bottom: 20px;
-`
-
-const ContainerInfo = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  justify-content: flex-end;
-`
-
-const LabelInfo = styled.label`
-  margin-right: 10px;
-  color: white;
-`
-
-const InputInfo = styled.div`
-  height: 25x;
-  padding: 3px 10px;
-  display: flex;
-  place-items: center;
-  border: 1px solid white;
-  border-radius: 4px;
-  color: white
-`
-
 function Controls({
   customCameraPosition,
   handleAnimationSpeed,
-  day,
+  sideralDay,
+  sinodicDay,
   handleFreeCamera,
+  resetCamera,
   toggleEcliptic,
   toggleMoonOrbit,
   handleMoonDistance,
@@ -162,25 +141,15 @@ function Controls({
           <CameraControls
             customCameraPosition={customCameraPosition}
             handleFreeCamera={handleFreeCamera}
+            resetCamera={resetCamera}
           />
         </Fieldset>
       </ControlItem>
-      <ControlItem>
-        <Fieldset legend={'Terra'}>
-          <ContainerInfo>
-            <LabelInfo>Dia</LabelInfo>
-            <InputInfo>{day}</InputInfo>
-          </ContainerInfo>
-        </Fieldset>
-      </ControlItem>
-      <ControlItem>
-        <Fieldset legend={'Lua'}>
-          <ContainerInfo>
-            <LabelInfo>Fase</LabelInfo>
-            <InputInfo>{day}</InputInfo>
-          </ContainerInfo>
-        </Fieldset>
-      </ControlItem>
+      <MoonPhaseDisplay
+        legend={'Lua'}
+        sinodicDay={sinodicDay}
+        sideralDay={sideralDay}
+      />
       <ControlItem>
         <label>Moon Distance</label>
         <input defaultValue={moonDistance} type={'text'} onChange={handleMoon} />

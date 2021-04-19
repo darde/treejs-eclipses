@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 import './global.css';
 import App, { 
   handleAnimationSpeed,
-  resetCamera,
   handleFreeCamera,
-  setCameraPosition,
   handleMoonDistance,
   toggleEcliptic,
   toggleMoonOrbit,
@@ -13,31 +11,47 @@ import App, {
 import Controls from './components/Controls'
 
 let freeCamera = false
+let sideralDay = 1
+let sinodicDay = 1 // (Moon age) 0 = New Moon
 
-App((day, _freeCamera) => {
-  if (_freeCamera !== freeCamera) {
-    freeCamera = _freeCamera
-  }
-  
-  render(day, freeCamera)
-})
+const controlsCallbackInterface = {
+  resetCameraCallback() {
+    render({ resetCamera: true, sideralDay, sinodicDay })
+  },
+
+  updateSideralAndSinodicDays(_sideralDay, _sinodicDay, _freeCamera) {
+    sideralDay = _sideralDay
+    sinodicDay = _sinodicDay
+    if (_freeCamera !== freeCamera) {
+      freeCamera = _freeCamera
+    }
+    render({ sideralDay, sinodicDay, freeCamera })
+  },
+}
+
+App(controlsCallbackInterface)
+
+const AppControls = ({ sideralDay, freeCamera, sinodicDay, resetCamera = false }) => (
+  <Controls
+    sideralDay={sideralDay}
+    sinodicDay={sinodicDay}
+    customCameraPosition={freeCamera}
+    handleFreeCamera={handleFreeCamera}
+    toggleEcliptic={toggleEcliptic}
+    toggleMoonOrbit={toggleMoonOrbit}
+    handleMoonDistance={handleMoonDistance}
+    resetCamera={resetCamera}
+    handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
+  />
+)
 
 const container = document.querySelector('#root')
 
-function render(day, freeCamera) {
+function render(props) {
   ReactDOM.render(
-    <Controls
-      day={day}
-      customCameraPosition={freeCamera}
-      handleFreeCamera={handleFreeCamera}
-      toggleEcliptic={toggleEcliptic}
-      toggleMoonOrbit={toggleMoonOrbit}
-      handleMoonDistance={handleMoonDistance}
-      handleOnPress={() => resetCamera()}
-      handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
-    />,
+    <AppControls {...props} />,
     container
   )
 }
 
-render(1, freeCamera)
+render({ sideralDay, sinodicDay, freeCamera })

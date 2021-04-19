@@ -5,10 +5,10 @@ import Moon from './Moon'
 import { degToRad } from './helpers'
 
 function fillOrbit({ radius, position }) {
-  const circle = Circle(radius, 0x0000ff, 0)
+  const circle = Circle(radius, 0x0000ff, 0.5)
   const orbit = circle.entity
   const material = circle.material
-  orbit.position.set(0,0,0)
+  orbit.position.set(position.x, position.y, position.z)
   orbit.rotation.set(degToRad(90), 0, 0)
 
   return { orbit, material }
@@ -17,13 +17,13 @@ function fillOrbit({ radius, position }) {
 function EarthMoonSystem() {
   const orbitRadius = 4
   const earthMoonSystem = new Group()
-  const earthMoonSystemAxis = new Vector3(0, 0, 0)
-  earthMoonSystem.rotateOnAxis(earthMoonSystemAxis, degToRad(0))
+  const moonOrbitSystem = new Group()
+  earthMoonSystem.rotateOnAxis(new Vector3(0, 0, 1), degToRad(20))
   
   const earth = Earth.system
   const moon = Moon.system
   
-  const moonPosition = orbitRadius
+  const moonPosition = -orbitRadius
   earth.position.set(0,0,0)
   moon.position.set(moonPosition,0,0)
   
@@ -33,6 +33,8 @@ function EarthMoonSystem() {
   earthMoonSystem.add(earth)
   earthMoonSystem.add(moon)
   earthMoonSystem.add(orbit)
+
+  moonOrbitSystem.add(earthMoonSystem)
 
   function animateMoon(angle) { // degrees
     moon.position.x = moonPosition * Math.cos(-degToRad(angle))
@@ -54,12 +56,17 @@ function EarthMoonSystem() {
     material.opacity = opacity > 0 ? 0 : 0.2
   }
 
+  function rotateMoonOrbit(increment) {
+    moonOrbitSystem.rotateOnAxis(new Vector3(0, 1, 0), degToRad(increment))
+  }
+
   return {
-    system: earthMoonSystem,
+    system: moonOrbitSystem,
     setMoonDistance,
     animateMoon,
     animateEarth,
     toggleMoonOrbit,
+    rotateMoonOrbit,
   }
 }
 

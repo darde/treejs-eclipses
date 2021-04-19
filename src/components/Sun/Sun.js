@@ -44,10 +44,13 @@ function rotateSun(angle = 0) {
 }
 
 function setPosition(x = -10, y = 0, z = 0) {
-  console.log('sun: ', typeof x)
   sun.position.set(x, y, z)
   // directionalLight.position.set(x, y, z)
   spotLight.position.set(x, y, z)
+}
+
+function getPosition() {
+  return sun.position
 }
 
 function Sun() {
@@ -57,6 +60,7 @@ function Sun() {
     entity: sun,
     setPosition,
     rotateSun,
+    getPosition,
   }
 }
 

@@ -94,7 +94,7 @@ const Label = styled.label`
 
 const initialState = {
   top: 'disabled',
-  left: 'enabled',
+  left: 'disabled',
   right: 'disabled',
 }
 
@@ -123,25 +123,30 @@ function handleState(state, action) {
   }
 }
 
-function CameraControls({ customCameraPosition, handleFreeCamera }) {
+function CameraControls({ customCameraPosition, handleFreeCamera, resetCamera }) {
   const [state, dispatch] = useReducer(handleState, initialState)
 
   const { top, left, right } = state
 
   useEffect(() => {
+    dispatch(null)
+  }, [resetCamera])
+
+  useEffect(() => {
     customCameraPosition && dispatch()
   }, [customCameraPosition])
 
-  function handleOnClick(value) {
-    handleFreeCamera(false, value)
-    dispatch(value)
+  function handleOnClick(e) {
+    const { id } = e.target
+    handleFreeCamera(false, id)
+    dispatch(id)
   }
 
   return (
     <CameraControlsContainer>
-      <CubeFace face={'top'} active={top} onClick={() => handleOnClick('top')} />
-      <CubeFace face={'left'} active={left} onClick={() => handleOnClick('left')} />
-      <CubeFace face={'right'} active={right} onClick={() => handleOnClick('right')} />
+      <CubeFace face={'top'} active={top} id={'top'} onClick={handleOnClick} />
+      <CubeFace face={'left'} active={left} id={'left'} onClick={handleOnClick} />
+      <CubeFace face={'right'} active={right} id={'right'} onClick={handleOnClick} />
       <Labels>
         <Label face={'left'}>[x,y]</Label>
         <Label face={'top'}>[x,z]</Label>
