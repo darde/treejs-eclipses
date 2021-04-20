@@ -1,5 +1,7 @@
 import React, { useReducer, useEffect } from 'react'
 import styled, { css } from 'styled-components'
+import Fieldset from '../Fieldset'
+import GlassButton from './GlassButton'
 
 const CameraControlsContainer = styled.div`
   width: 40px;
@@ -123,7 +125,7 @@ function handleState(state, action) {
   }
 }
 
-function CameraControls({ customCameraPosition, handleFreeCamera, resetCamera }) {
+function CameraControls({ customCameraPosition, handleFreeCamera, resetCamera, legend }) {
   const [state, dispatch] = useReducer(handleState, initialState)
 
   const { top, left, right } = state
@@ -143,16 +145,19 @@ function CameraControls({ customCameraPosition, handleFreeCamera, resetCamera })
   }
 
   return (
-    <CameraControlsContainer>
-      <CubeFace face={'top'} active={top} id={'top'} onClick={handleOnClick} />
-      <CubeFace face={'left'} active={left} id={'left'} onClick={handleOnClick} />
-      <CubeFace face={'right'} active={right} id={'right'} onClick={handleOnClick} />
-      <Labels>
-        <Label face={'left'}>[x,y]</Label>
-        <Label face={'top'}>[x,z]</Label>
-        <Label face={'right'}>[y,z]</Label>
-      </Labels>
-    </CameraControlsContainer>
+    <Fieldset legend={legend}>
+      <CameraControlsContainer>
+        <CubeFace face={'top'} active={top} id={'top'} onClick={handleOnClick} />
+        <CubeFace face={'left'} active={left} id={'left'} onClick={handleOnClick} />
+        <CubeFace face={'right'} active={right} id={'right'} onClick={handleOnClick} />
+        <Labels>
+          <Label face={'left'}>[x,y]</Label>
+          <Label face={'top'}>[x,z]</Label>
+          <Label face={'right'}>[y,z]</Label>
+        </Labels>
+      </CameraControlsContainer>
+      <GlassButton id={'earth'} handleOnClick={handleOnClick}>Terra</GlassButton>
+    </Fieldset>
   )
 }
 

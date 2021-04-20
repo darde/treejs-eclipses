@@ -3,8 +3,6 @@ import EarthMoonSystem from './components/EarthMoonSystem'
 import Sun from './components/Sun'
 import Skybox from './components/Skybox'
 import Ecliptic from './components/Ecliptic'
-import { degToRad } from './components/helpers'
-import './App.css'
 import OrbitControls from 'three-orbitcontrols'
 
 const screenWidth = window.innerWidth
@@ -28,6 +26,7 @@ let sunAngle = 0
 let speedAnimation = 1
 let updateAnimationProperties
 let axesHelper
+let lookAtMoon = false
 
 function init() {
   const canvas = document.getElementById('canvas')
@@ -50,7 +49,6 @@ function init() {
   camera = new THREE.PerspectiveCamera(80, screenWidth / screenHeight, 0.1, 1000)
   camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
   camera.lookAt(0, 0, 0)
-  // camera.rotation.set(degToRad(15),0,0)
   
   controls = new OrbitControls(camera, renderer.domElement)
   controls.target.set(0, 0, 0)
@@ -58,9 +56,12 @@ function init() {
   controls.maxPolarAngle = Math.PI / 2
   controls.enableDamping = true
   controls.addEventListener('start', () => {
+    if (lookAtMoon) {
+      lookAtMoon = false;
+      controls.reset();
+    }
     updateAnimationProperties.resetCameraCallback()
   })
-  // const orbitControls = new OrbitControls(camera, renderer.domElement);
   
   // SETUP SUN
   Sun.setPosition(-170, 0, 0)
@@ -117,7 +118,20 @@ function animate() {
   controls.update()
 }
 
+function setCameraFollowMoon() {
+  const moonPosition = EarthMoonSystem.getMoonPosition()
+  const earthPosition = EarthMoonSystem.getEarthPosition()
+  const { x, y, z } = earthPosition
+
+  camera.position.set(x, (y + 1.4), z)
+  camera.lookAt(moonPosition)
+}
+
 function render() {
+  if (lookAtMoon) {
+    setCameraFollowMoon()
+  }
+
   renderer.render(scene, camera)
 }
 
@@ -131,6 +145,9 @@ const setCameraPosition = (position) => {
       break;
     case 'right':
       camera.position.set(0, 1, -5)
+      break;
+    case 'earth':
+      lookAtMoon = true
       break;
     default:
       camera.position.set(0, 1, 5)
@@ -147,10 +164,6 @@ function onWindowResize() {
   camera.updateProjectionMatrix()
 }
 
-export const handleMoonDistance = (valueX) => {
-  EarthMoonSystem.setMoonDistance(valueX)
-}
-
 export const toggleMoonOrbit = () => {
   EarthMoonSystem.toggleMoonOrbit()
 }
@@ -160,6 +173,7 @@ export const handleAnimationSpeed = (value) => {
 }
 
 export const handleFreeCamera = (value, position) => {
+  console.log('handleFreeCamera: ', value, ', pos: ', position)
   setCameraPosition(position)
   freeCamera = value
   const { updateSideralAndSinodicDays } = updateAnimationProperties

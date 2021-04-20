@@ -5,6 +5,7 @@ const ContainerInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   font-size: 13px;
+  margin-bottom: 15px;
   justify-content: flex-end;
 `
 

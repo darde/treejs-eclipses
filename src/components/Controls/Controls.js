@@ -7,16 +7,14 @@ import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import CameraControls from './CameraControls'
 import ControlItem from './ControlItem'
-import ContainerInfo from './ContainerInfo'
-import LabelInfo from './LabelInfo'
-import Fieldset from '../Fieldset'
+import EclipsesControls from './EclipsesControls'
 import '../fontawesome'
 import MoonPhaseDisplay from './MoonPhaseDisplay'
 
 const PanelContainer = styled.div`
   position: relative;
   width: 200px;
-  max-height: 800px;
+  max-height: 900px;
   height: 100%;
   padding: 20px;
   display: flex;
@@ -86,17 +84,8 @@ function Controls({
   resetCamera,
   toggleEcliptic,
   toggleMoonOrbit,
-  handleMoonDistance,
  }) {
   const [open, setOpen] = useState(true)
-  const [sunRadius, setSunRadius] = useState(-90)
-  const [moonDistance, setMoonDistance] = useState(5)
-
-  function handleMoon(e) {
-    setMoonDistance(e.target.value)
-
-    handleMoonDistance(e.target.value)
-  }
 
   return ReactDOM.createPortal(
     <PanelContainer open={open}>
@@ -137,23 +126,19 @@ function Controls({
         />
       </ControlItem>
       <ControlItem>
-        <Fieldset legend={'Câmera'}>
-          <CameraControls
-            customCameraPosition={customCameraPosition}
-            handleFreeCamera={handleFreeCamera}
-            resetCamera={resetCamera}
-          />
-        </Fieldset>
+        <CameraControls
+          legend={'Câmera'}
+          customCameraPosition={customCameraPosition}
+          handleFreeCamera={handleFreeCamera}
+          resetCamera={resetCamera}
+        />
       </ControlItem>
       <MoonPhaseDisplay
         legend={'Lua'}
         sinodicDay={sinodicDay}
         sideralDay={sideralDay}
       />
-      <ControlItem>
-        <label>Moon Distance</label>
-        <input defaultValue={moonDistance} type={'text'} onChange={handleMoon} />
-      </ControlItem>
+      <EclipsesControls />
     </PanelContainer>,
     document.querySelector('#controls')  
   )

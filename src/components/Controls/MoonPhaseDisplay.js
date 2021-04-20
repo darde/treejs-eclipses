@@ -6,7 +6,7 @@ import LabelInfo from './LabelInfo'
 import Fieldset from '../Fieldset'
 import MoonPicture from '../img/moon.png'
 
-const moonShadowWidth = 76
+const moonShadowWidth = 78
 
 const MoonMask = styled.div`
   width: 76px;
@@ -27,12 +27,13 @@ const MoonMask = styled.div`
 const MoonShadow = styled.div`
   width: ${moonShadowWidth}px;
   height: ${moonShadowWidth}px;
-  border-radius: 38px;
+  border-radius: 30px / 100px;
   background: rgba(0,0,0,0.8);
   z-index: 20;
   position: absolute;
-  transition: all 0.5 ease;
+  // transition: all 0.5s ease;
   left: ${({ moonAge }) => getShadowRelativeToMoonAge(moonAge, moonShadowWidth)}px;
+  // left: 0;
 `
 
 const InputInfo = styled.div`
@@ -46,16 +47,13 @@ const InputInfo = styled.div`
   color: white
 `
 const getShadowRelativeToMoonAge = (moonAge = 0, width) => {
-  const position = width * ((moonAge - 1) / (13.8))
-  
-  if (moonAge < 14.8) {
+  let position = (width * (moonAge / (14.8))).toFixed(2)
 
-    return position
-  } else {
-    return - width + (width * ((moonAge/2 - 1) / (13.8)))
+  if (position >= width) {
+    position = (-width + (width * ((moonAge - 14.8) / (29.5 - 14.8)))).toFixed(2)
   }
 
-  return 0
+  return position
 }
 
 // In order to use sinodicDay (moonAge) to calculate the moon phases I should move the earth around the sun
@@ -66,10 +64,10 @@ const MoonPhaseDisplay = ({ legend, sideralDay, sinodicDay: moonAge }) => (
         <LabelInfo>Dia Sideral</LabelInfo>
         <InputInfo>{sideralDay}</InputInfo>
       </ContainerInfo>
-      <ContainerInfo>
+      {/* <ContainerInfo>
         <LabelInfo>Dia Sinódico</LabelInfo>
         <InputInfo>{moonAge}</InputInfo>
-      </ContainerInfo>
+      </ContainerInfo> */}
       <ContainerInfo>
         <LabelInfo>Fase</LabelInfo>
         <MoonMask>

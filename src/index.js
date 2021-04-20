@@ -4,15 +4,14 @@ import './global.css';
 import App, { 
   handleAnimationSpeed,
   handleFreeCamera,
-  handleMoonDistance,
   toggleEcliptic,
   toggleMoonOrbit,
  } from './App';
 import Controls from './components/Controls'
 
 let freeCamera = false
-let sideralDay = 1
-let sinodicDay = 1 // (Moon age) 0 = New Moon
+let sideralDay = 0
+let sinodicDay = 1 //It's not being used (Moon age) 0 = New Moon
 
 const controlsCallbackInterface = {
   resetCameraCallback() {
@@ -39,7 +38,6 @@ const AppControls = ({ sideralDay, freeCamera, sinodicDay, resetCamera = false }
     handleFreeCamera={handleFreeCamera}
     toggleEcliptic={toggleEcliptic}
     toggleMoonOrbit={toggleMoonOrbit}
-    handleMoonDistance={handleMoonDistance}
     resetCamera={resetCamera}
     handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
   />

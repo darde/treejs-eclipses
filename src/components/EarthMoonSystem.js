@@ -47,10 +47,6 @@ function EarthMoonSystem() {
     Earth.rotateEarth(increment)
   }
 
-  function setMoonDistance(value) {
-    moon.position.set(value, 0, 0)
-  }
-
   function toggleMoonOrbit() {
     const { material, material: { opacity }} = moonOrbit
     material.opacity = opacity > 0 ? 0 : 0.2
@@ -60,13 +56,22 @@ function EarthMoonSystem() {
     moonOrbitSystem.rotateOnAxis(new Vector3(0, 1, 0), degToRad(increment))
   }
 
+  function getMoonPosition() {
+    return moon.position
+  }
+
+  function getEarthPosition() {
+    return earth.position
+  }
+
   return {
     system: moonOrbitSystem,
-    setMoonDistance,
     animateMoon,
     animateEarth,
     toggleMoonOrbit,
     rotateMoonOrbit,
+    getMoonPosition,
+    getEarthPosition,
   }
 }
 
