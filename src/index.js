@@ -8,6 +8,7 @@ import App, {
   toggleMoonOrbit,
  } from './App';
 import Controls from './components/Controls'
+import EclipsesControls from './components/Controls/EclipsesControls/'
 
 let freeCamera = false
 let sideralDay = 0
@@ -31,16 +32,19 @@ const controlsCallbackInterface = {
 App(controlsCallbackInterface)
 
 const AppControls = ({ sideralDay, freeCamera, sinodicDay, resetCamera = false }) => (
-  <Controls
-    sideralDay={sideralDay}
-    sinodicDay={sinodicDay}
-    customCameraPosition={freeCamera}
-    handleFreeCamera={handleFreeCamera}
-    toggleEcliptic={toggleEcliptic}
-    toggleMoonOrbit={toggleMoonOrbit}
-    resetCamera={resetCamera}
-    handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
-  />
+  <>
+    <Controls
+      sideralDay={sideralDay}
+      sinodicDay={sinodicDay}
+      customCameraPosition={freeCamera}
+      handleFreeCamera={handleFreeCamera}
+      toggleEcliptic={toggleEcliptic}
+      toggleMoonOrbit={toggleMoonOrbit}
+      resetCamera={resetCamera}
+      handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
+    />
+    <EclipsesControls />
+  </>
 )
 
 const container = document.querySelector('#root')

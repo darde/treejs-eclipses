@@ -60,16 +60,16 @@ const getShadowRelativeToMoonAge = (moonAge = 0, width) => {
 const MoonPhaseDisplay = ({ legend, sideralDay, sinodicDay: moonAge }) => (
   <ControlItem>
     <Fieldset legend={legend}>
-      <ContainerInfo>
+      {/* <ContainerInfo>
         <LabelInfo>Dia Sideral</LabelInfo>
         <InputInfo>{sideralDay}</InputInfo>
-      </ContainerInfo>
+      </ContainerInfo> */}
       {/* <ContainerInfo>
         <LabelInfo>Dia Sinódico</LabelInfo>
         <InputInfo>{moonAge}</InputInfo>
       </ContainerInfo> */}
       <ContainerInfo>
-        <LabelInfo>Fase</LabelInfo>
+        {/* <LabelInfo>Fase</LabelInfo> */}
         <MoonMask>
           <MoonShadow moonAge={sideralDay} />
           <img src={MoonPicture} />

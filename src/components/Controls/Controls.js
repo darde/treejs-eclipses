@@ -7,7 +7,7 @@ import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import CameraControls from './CameraControls'
 import ControlItem from './ControlItem'
-import EclipsesControls from './EclipsesControls'
+// import EclipsesControls from './EclipsesControls'
 import '../fontawesome'
 import MoonPhaseDisplay from './MoonPhaseDisplay'
 
@@ -22,15 +22,15 @@ const PanelContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   bottom: 0;
-  left: -195px;
-  background: rgba(34,141,255,0.3);
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  box-shadow: 0 0 2px rgba(255,255,255,0.3), 0 0 5px rgba(255,255,255,0.3), 0 0 7px rgba(255,255,255,0.3), 0 0 5px rgba(34,141,255,0.3), 0 0 10px rgba(34,141,255,0.3), 0 0 15px rgba(34,141,255,0.3), 0 0 20px rgba(34,141,255,0.3), 0 0 25px rgba(34,141,255,0.3);
+  // left: -195px;
+  // background: rgba(34,141,255,0.3);
+  // border-top-right-radius: 4px;
+  // border-bottom-right-radius: 4px;
+  // box-shadow: 0 0 2px rgba(255,255,255,0.3), 0 0 5px rgba(255,255,255,0.3), 0 0 7px rgba(255,255,255,0.3), 0 0 5px rgba(34,141,255,0.3), 0 0 10px rgba(34,141,255,0.3), 0 0 15px rgba(34,141,255,0.3), 0 0 20px rgba(34,141,255,0.3), 0 0 25px rgba(34,141,255,0.3);
   transition: left 0.3s ease;
 
   ${({ open }) => open && css`
-    left: 0
+    // left: 0
   `}
   `
 
@@ -89,7 +89,7 @@ function Controls({
 
   return ReactDOM.createPortal(
     <PanelContainer open={open}>
-      <ToogleButtonContainer>
+      {/* <ToogleButtonContainer>
         <ToggleButton onClick={() => setOpen(!open)}>
           <FontAwesomeIcon
             icon={faAngleDoubleRight}
@@ -98,22 +98,22 @@ function Controls({
             rotation={open ? 180 : 0}
           />
         </ToggleButton>
-      </ToogleButtonContainer>
-      <ControlItem>
+      </ToogleButtonContainer> */}
+      {/* <ControlItem>
         <SwitchControl
           label="Eclíptica"
           callback={toggleEcliptic}
           id="ecliptica"
         />
-      </ControlItem>
-      <ControlItem>
+      </ControlItem> */}
+      {/* <ControlItem>
         <SwitchControl
           label="Órbita lunar"
           callback={toggleMoonOrbit}
           id="moonOrbit"
         />
-      </ControlItem>
-      <ControlItem>
+      </ControlItem> */}
+      {/* <ControlItem>
         <Slider
           label={'Velocidade da animação'}
           width={150}
@@ -124,7 +124,12 @@ function Controls({
           graduationLabels={[0,1,2,3,4,5]}
           handleAnimationSpeed={handleAnimationSpeed}
         />
-      </ControlItem>
+      </ControlItem> */}
+      <MoonPhaseDisplay
+        legend={'Fase da Lua'}
+        sinodicDay={sinodicDay}
+        sideralDay={sideralDay}
+      />
       <ControlItem>
         <CameraControls
           legend={'Câmera'}
@@ -133,14 +138,9 @@ function Controls({
           resetCamera={resetCamera}
         />
       </ControlItem>
-      <MoonPhaseDisplay
-        legend={'Lua'}
-        sinodicDay={sinodicDay}
-        sideralDay={sideralDay}
-      />
-      <EclipsesControls />
+      {/* <EclipsesControls /> */}
     </PanelContainer>,
-    document.querySelector('#controls')  
+    document.querySelector('#right-panel')
   )
 }
 

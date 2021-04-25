@@ -55,13 +55,7 @@ function init() {
   controls.enablePan = false
   controls.maxPolarAngle = Math.PI / 2
   controls.enableDamping = true
-  controls.addEventListener('start', () => {
-    if (lookAtMoon) {
-      lookAtMoon = false;
-      controls.reset();
-    }
-    updateAnimationProperties.resetCameraCallback()
-  })
+  controls.addEventListener('start', handleOrbitControlStart)
   
   // SETUP SUN
   Sun.setPosition(-170, 0, 0)
@@ -73,6 +67,16 @@ function init() {
   scene = new THREE.Scene()
 }
 
+function handleOrbitControlStart() {
+  if (lookAtMoon) {
+    lookAtMoon = false;
+    const earthPosition = EarthMoonSystem.getEarthPosition()
+    const { x, y, z } = earthPosition
+    camera.position.set(x, y, cameraPosition.z)
+  }
+  updateAnimationProperties.resetCameraCallback()
+}
+
 function animateEarthMoonSystem() {
   const { updateSideralAndSinodicDays, updateMoonAge } = updateAnimationProperties
 
@@ -80,6 +84,7 @@ function animateEarthMoonSystem() {
     earthTranslationAngle = 0
     sideralDay = sideralDay >= 27 ? 1 : sideralDay + 1
     sinodicDay = sinodicDay >= 29 ? 1 : sinodicDay + 1
+    console.log('freeCamera: ', freeCamera)
     updateSideralAndSinodicDays(sideralDay, sinodicDay, freeCamera)
   } else {
     earthTranslationAngle += 1 * speedAnimation
@@ -138,18 +143,22 @@ function render() {
 const setCameraPosition = (position) => {
   switch (position) {
     case 'top':
+      lookAtMoon = false
       camera.position.set(0, 5, 0)
       break;
     case 'left':
+      lookAtMoon = false
       camera.position.set(0, 1, 5)
       break;
     case 'right':
+      lookAtMoon = false
       camera.position.set(0, 1, -5)
       break;
     case 'earth':
       lookAtMoon = true
       break;
     default:
+      lookAtMoon = false
       camera.position.set(0, 1, 5)
   }
 }
@@ -173,7 +182,6 @@ export const handleAnimationSpeed = (value) => {
 }
 
 export const handleFreeCamera = (value, position) => {
-  console.log('handleFreeCamera: ', value, ', pos: ', position)
   setCameraPosition(position)
   freeCamera = value
   const { updateSideralAndSinodicDays } = updateAnimationProperties

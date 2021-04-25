@@ -1,15 +1,16 @@
-import React, { useReducer, useEffect } from 'react'
+import React, { useReducer, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import Fieldset from '../Fieldset'
 import GlassButton from './GlassButton'
+import LabelInfo from './LabelInfo'
 
 const CameraControlsContainer = styled.div`
   width: 40px;
   height: 40px;
   position: relative;
-  margin: 20px 0 35px;
+  margin: 20px 0 50px;
   padding: 0;
-  left: 22%;
+  left: -13px;
   top: 25px;
   box-sizing: border-box;
 `
@@ -68,22 +69,25 @@ const Label = styled.label`
     switch(face) {
       case 'left':
         return css`
-          top: 20%;
-          left: -55%;
+          top: 0;
+          left: -56px;
+          width: 55px;
+          text-align: right;
         `
       case 'top':
         return css`
-          top: -45px;
-          left: 25px;
           top: -115%;
-          left: 65%;
+          left: -10px;
+          width: 95px;
+          text-align: center;
+          
         `
       case 'right':
         return css`
-          left: 30px;
-          top: 10px;
-          left: 170%;
-          top: 20%;
+          top: 0;
+          width: 55px;
+          left: 70px;
+          text-align: left;
         `
       default:
         return css`
@@ -94,31 +98,59 @@ const Label = styled.label`
   }}
 `
 
+const SubTitle = styled.label`
+  color: white;
+  font-size: 13px;
+`
+
+const EarthButton = styled.button`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 0;
+  margin-top: 7px;
+  cursor: pointer;
+  outline: none;
+  background: ${({ active }) => active === 'enabled' ? '#81b0bf' : '#c7c7c7'};
+`
+
 const initialState = {
   top: 'disabled',
   left: 'disabled',
   right: 'disabled',
+  earth: 'disabled',
 }
 
 function handleState(state, action) {
+  console.log('action: ', action)
   switch (action) {
     case 'top':
       return {
         top: 'enabled',
         left: 'disabled',
         right: 'disabled',
+        earth: 'disabled',
       }
     case 'left':
       return {
         top: 'disabled',
         left: 'enabled',
         right: 'disabled',
+        earth: 'disabled',
       }
     case 'right':
       return {
         top: 'disabled',
         left: 'disabled',
         right: 'enabled',
+        earth: 'disabled',
+      }
+    case 'earth':
+      return {
+        top: 'disabled',
+        left: 'disabled',
+        right: 'disabled',
+        earth: 'enabled'
       }
     default:
       return initialState
@@ -127,8 +159,7 @@ function handleState(state, action) {
 
 function CameraControls({ customCameraPosition, handleFreeCamera, resetCamera, legend }) {
   const [state, dispatch] = useReducer(handleState, initialState)
-
-  const { top, left, right } = state
+  const { top, left, right, earth } = state
 
   useEffect(() => {
     dispatch(null)
@@ -151,12 +182,17 @@ function CameraControls({ customCameraPosition, handleFreeCamera, resetCamera, l
         <CubeFace face={'left'} active={left} id={'left'} onClick={handleOnClick} />
         <CubeFace face={'right'} active={right} id={'right'} onClick={handleOnClick} />
         <Labels>
-          <Label face={'left'}>[x,y]</Label>
-          <Label face={'top'}>[x,z]</Label>
-          <Label face={'right'}>[y,z]</Label>
+          <Label face={'left'}>visão lateral 1</Label>
+          <Label face={'top'}>visão superior</Label>
+          <Label face={'right'}>visão lateral 2</Label>
         </Labels>
       </CameraControlsContainer>
-      <GlassButton id={'earth'} handleOnClick={handleOnClick}>Terra</GlassButton>
+      <SubTitle>visão da terra</SubTitle>
+      <EarthButton
+        id={'earth'}
+        onMouseDown={handleOnClick}
+        active={earth}
+      />
     </Fieldset>
   )
 }
