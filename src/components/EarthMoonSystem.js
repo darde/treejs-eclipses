@@ -4,8 +4,8 @@ import Earth from './Earth'
 import Moon from './Moon'
 import { degToRad } from './helpers'
 
-function fillOrbit({ radius, position }) {
-  const circle = Circle(radius, 0x0000ff, 0.5)
+function fillMoonOrbit({ radius, position }) {
+  const circle = Circle(radius, 0x00CED1, 0)
   const orbit = circle.entity
   const material = circle.material
   orbit.position.set(position.x, position.y, position.z)
@@ -27,7 +27,7 @@ function EarthMoonSystem() {
   earth.position.set(0,0,0)
   moon.position.set(moonPosition,0,0)
   
-  const moonOrbit = fillOrbit({ radius: orbitRadius, position: {x: 0, y: 0, z: 0}})
+  const moonOrbit = fillMoonOrbit({ radius: orbitRadius, position: {x: 0, y: 0, z: 0}})
   const { orbit } = moonOrbit
 
   earthMoonSystem.add(earth)

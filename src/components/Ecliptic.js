@@ -3,7 +3,7 @@ import { DoubleSide, Mesh, MeshBasicMaterial, CircleGeometry } from 'three'
 import { degToRad } from './helpers'
 
 function Ecliptic() {
-  let circle = Circle(90, 0xffffff, 0)
+  let circle = Circle(90, 0x00BFFF, 0)
   let plane = circle.entity
   let material = circle.material
 

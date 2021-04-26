@@ -3,11 +3,18 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   width: 140px;
-  height: 80px;
+  // height: 80px;
   display: flex;
+  border-top: 1px dotted #fff;
+  padding-top: 10px;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: space-between;
+
+  &:first-child {
+    border: none;
+    padding: 0;
+  }
 `
 
 const TotalSolarEclipseButton = styled.button`
@@ -66,6 +73,7 @@ const LunarEclipseButton = styled.button`
 const Label = styled.div`
   font-size: 13px;
   color: white;
+  padding-bottom: 10px;
 `
 
 const getButtonShapeByType = (type) => {
@@ -81,8 +89,8 @@ const getButtonShapeByType = (type) => {
 
 const EclipseButton = ({ label, type }) => (
   <Container>
-    {getButtonShapeByType(type)}
     <Label>{label}</Label>
+    {getButtonShapeByType(type)}
   </Container>
 )
 

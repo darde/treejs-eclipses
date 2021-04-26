@@ -18,7 +18,7 @@ let controls
 let scene
 let freeCamera = false
 let moonTranslation = 0
-let earthTranslationAngle = 0
+let earthRotationAngle = 0
 let moonTranslationAngle = 0
 let moonOrbitAngle = 0
 let moonAge = 0
@@ -79,16 +79,17 @@ function handleOrbitControlStart() {
 
 function animateEarthMoonSystem() {
   const { updateSideralAndSinodicDays, updateMoonAge } = updateAnimationProperties
-
-  if (earthTranslationAngle > 359) {
-    earthTranslationAngle = 0
+  let test;
+  if (earthRotationAngle > 359) {
+    earthRotationAngle = 0
     sideralDay = sideralDay >= 27 ? 1 : sideralDay + 1
     sinodicDay = sinodicDay >= 29 ? 1 : sinodicDay + 1
-    console.log('freeCamera: ', freeCamera)
     updateSideralAndSinodicDays(sideralDay, sinodicDay, freeCamera)
   } else {
-    earthTranslationAngle += 1 * speedAnimation
+    earthRotationAngle += 1 * speedAnimation
     moonTranslationAngle = Number(moonTranslationAngle + (moontTranslationIncrement * speedAnimation))
+    // sideralDay = (27.3 * moonTranslationAngle) / 360
+    // updateSideralAndSinodicDays(sideralDay, sinodicDay, freeCamera)
   }
   
   if (moonTranslationAngle === 359) {
@@ -103,7 +104,7 @@ function animateEarthMoonSystem() {
   }
   
   EarthMoonSystem.animateMoon(moonTranslationAngle)
-  EarthMoonSystem.animateEarth(earthTranslationAngle)
+  EarthMoonSystem.animateEarth(earthRotationAngle)
   // EarthMoonSystem.rotateMoonOrbit(moonOrbitAngle)
 }
 
@@ -162,7 +163,6 @@ const setCameraPosition = (position) => {
       camera.position.set(0, 1, 5)
   }
 }
-
 
 function onWindowResize() {
   const screenWidth = window.innerWidth

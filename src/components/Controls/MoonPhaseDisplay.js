@@ -17,6 +17,7 @@ const MoonMask = styled.div`
   border-radius: 38px;
   position: relative;
   overflow: hidden;
+  margin-bottom: 10px;
 
   img {
     position: absolute;
@@ -46,37 +47,61 @@ const InputInfo = styled.div`
   border-radius: 4px;
   color: white
 `
+
+const Label = styled.label`
+  color: white;
+  font-size: 13px;
+`
+
 const getShadowRelativeToMoonAge = (moonAge = 0, width) => {
   let position = (width * (moonAge / (14.8))).toFixed(2)
 
   if (position >= width) {
-    position = (-width + (width * ((moonAge - 14.8) / (29.5 - 14.8)))).toFixed(2)
+    position = (-width + (width * ((moonAge - 14.8) / (27.3 - 14.8)))).toFixed(2)
   }
 
   return position
 }
 
+
+const getMoonPhase = (moonAge) => {
+  if (moonAge >= 20.475) {
+    return 'Minguante'
+  } else if (moonAge >= 13.65) {
+    return 'Cheia'
+  } else if (moonAge >= 6.825) {
+    return 'Crescente'
+  } else {
+    return 'Nova'
+  }
+}
+
 // In order to use sinodicDay (moonAge) to calculate the moon phases I should move the earth around the sun
-const MoonPhaseDisplay = ({ legend, sideralDay, sinodicDay: moonAge }) => (
-  <ControlItem>
-    <Fieldset legend={legend}>
-      {/* <ContainerInfo>
-        <LabelInfo>Dia Sideral</LabelInfo>
-        <InputInfo>{sideralDay}</InputInfo>
-      </ContainerInfo> */}
-      {/* <ContainerInfo>
-        <LabelInfo>Dia Sinódico</LabelInfo>
-        <InputInfo>{moonAge}</InputInfo>
-      </ContainerInfo> */}
-      <ContainerInfo>
-        {/* <LabelInfo>Fase</LabelInfo> */}
-        <MoonMask>
-          <MoonShadow moonAge={sideralDay} />
-          <img src={MoonPicture} />
-        </MoonMask>
-      </ContainerInfo>
-    </Fieldset>
-  </ControlItem>
-)
+const MoonPhaseDisplay = ({ legend, sideralDay, sinodicDay: moonAge }) => {
+  console.log('sideralDay: ', sideralDay)
+  return (
+    <ControlItem>
+      <Fieldset legend={legend}>
+        {/* <ContainerInfo>
+          <LabelInfo>Dia Sideral</LabelInfo>
+          <InputInfo>{sideralDay}</InputInfo>
+        </ContainerInfo> */}
+        {/* <ContainerInfo>
+          <LabelInfo>Dia Sinódico</LabelInfo>
+          <InputInfo>{moonAge}</InputInfo>
+        </ContainerInfo> */}
+        <ContainerInfo>
+          {/* <LabelInfo>Fase</LabelInfo> */}
+          <MoonMask>
+            <MoonShadow moonAge={sideralDay} />
+            <img src={MoonPicture} />
+          </MoonMask>
+          <Label>{getMoonPhase(moonAge)}</Label>
+          <Label>{moonAge}</Label>
+        </ContainerInfo>
+      </Fieldset>
+    </ControlItem>
+  )
+}
 
 export default MoonPhaseDisplay

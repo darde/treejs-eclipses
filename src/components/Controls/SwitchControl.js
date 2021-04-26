@@ -6,7 +6,7 @@ import { shade } from 'polished'
 const SwitchContainer = styled.label`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
+  justify-content: flex-end;
   width: 100%;
 
   span {
@@ -32,14 +32,14 @@ function SwitchControl({ label, callback, id }) {
         checked={checked}
         checkedIcon={false}
         uncheckedIcon={false}
-        height={10}
-        width={40}
+        height={7}
+        width={30}
         boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-        handleDiameter={20}
+        handleDiameter={15}
         onHandleColor="#ffff00"
         offHandleColor="#228DFF"
-        offColor={shade(1, '#228DFF')}
-        onColor={shade(0, '#228DFF')}
+        offColor={'#f1f1f1'}
+        onColor={'#228DFF'}
         id={id}
       />
     </SwitchContainer>
