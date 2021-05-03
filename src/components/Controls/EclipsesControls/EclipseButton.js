@@ -17,7 +17,7 @@ const Container = styled.div`
   }
 `
 
-const TotalSolarEclipseButton = styled.button`
+const TotalSolarEclipseButton = styled.button.attrs(() => ({ id: 'solarTotalBtn' }))`
   width: 55px;
   height: 55px;
   border-radius: 50%;
@@ -27,7 +27,7 @@ const TotalSolarEclipseButton = styled.button`
   box-shadow: 0 0 2px rgba(255,240,20,.3), 0 0 5px rgba(255,240,20,.3), 0 0 7px rgba(255,240,20,.3), 0 0 5px rgba(34,141,255,0.3), 0 0 10px rgba(34,141,255,0.3), 0 0 15px rgba(34,141,255,0.3), 0 0 20px rgba(34,141,255,0.3), 0 0 25px rgba(34,141,255,0.3);
 `
 
-const AnullarSolarEclipseButton = styled.button`
+const AnullarSolarEclipseButton = styled.button.attrs(() => ({ id: 'anullarBtn' }))`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +48,7 @@ const AnullarSolarEclipseButton = styled.button`
   }
 `
 
-const LunarEclipseButton = styled.button`
+const LunarEclipseButton = styled.button.attrs(() => ({ id: 'lunarBtn' }))`
   position: relative;
   width: 56px;
   overflow: hidden;
@@ -76,21 +76,21 @@ const Label = styled.div`
   padding-bottom: 10px;
 `
 
-const getButtonShapeByType = (type) => {
+const getButtonShapeByType = (type, handleOnClick) => {
   switch (type) {
     case 'total-solar':
-      return <TotalSolarEclipseButton />
+      return <TotalSolarEclipseButton onClick={handleOnClick}/>
     case 'anullar-solar':
-      return <AnullarSolarEclipseButton />
+      return <AnullarSolarEclipseButton onClick={handleOnClick} />
     default:
-      return <LunarEclipseButton />
+      return <LunarEclipseButton onClick={handleOnClick} />
   }
 }
 
-const EclipseButton = ({ label, type }) => (
+const EclipseButton = ({ label, type, handleOnClick }) => (
   <Container>
     <Label>{label}</Label>
-    {getButtonShapeByType(type)}
+    {getButtonShapeByType(type, handleOnClick)}
   </Container>
 )
 

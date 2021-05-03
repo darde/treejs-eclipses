@@ -71,15 +71,15 @@ function handleOrbitControlStart() {
   if (lookAtMoon) {
     lookAtMoon = false;
     const earthPosition = EarthMoonSystem.getEarthPosition()
-    const { x, y, z } = earthPosition
+    const { x, y } = earthPosition
     camera.position.set(x, y, cameraPosition.z)
   }
   updateAnimationProperties.resetCameraCallback()
 }
 
 function animateEarthMoonSystem() {
-  const { updateSideralAndSinodicDays, updateMoonAge } = updateAnimationProperties
-  let test;
+  const { updateSideralAndSinodicDays } = updateAnimationProperties
+
   if (earthRotationAngle > 359) {
     earthRotationAngle = 0
     sideralDay = sideralDay >= 27 ? 1 : sideralDay + 1
@@ -173,6 +173,11 @@ function onWindowResize() {
   camera.updateProjectionMatrix()
 }
 
+function pauseOrbitControls() {
+  controls.enabled = false
+  updateAnimationProperties.setControlsVisibility(false)
+}
+
 export const toggleMoonOrbit = () => {
   EarthMoonSystem.toggleMoonOrbit()
 }
@@ -191,6 +196,15 @@ export const handleFreeCamera = (value, position) => {
 
 export const toggleEcliptic = () => {
   Ecliptic.toggleEcliptic()
+}
+
+export const handleTotalSolarEclipse = () => {
+  pauseOrbitControls();
+  console.log('handle total eclipse')
+}
+
+export function closeSimulation() {
+  controls.enabled = true
 }
 
 function App(updatePropertiesCallback) {

@@ -78,7 +78,6 @@ const getMoonPhase = (moonAge) => {
 
 // In order to use sinodicDay (moonAge) to calculate the moon phases I should move the earth around the sun
 const MoonPhaseDisplay = ({ legend, sideralDay, sinodicDay: moonAge }) => {
-  console.log('sideralDay: ', sideralDay)
   return (
     <ControlItem>
       <Fieldset legend={legend}>

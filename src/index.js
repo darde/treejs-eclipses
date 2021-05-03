@@ -4,36 +4,60 @@ import './global.css';
 import App, { 
   handleAnimationSpeed,
   handleFreeCamera,
+  handleTotalSolarEclipse,
   toggleEcliptic,
   toggleMoonOrbit,
+  closeSimulation,
  } from './App';
 import Controls from './components/Controls'
 import EclipsesControls from './components/Controls/EclipsesControls/'
 
-let freeCamera = false
-let sideralDay = 0
-let sinodicDay = 1 //It's not being used (Moon age) 0 = New Moon
+let state = {
+  sideralDay: 0,
+  sinodicDay: 1,
+  freeCamera: false,
+  controlsVisibility: true,
+}
+
+function handleCloseSimulation() {
+  closeSimulation()
+  state.controlsVisibility = !state.controlsVisibility
+
+  render({ ...state })
+}
 
 const controlsCallbackInterface = {
   resetCameraCallback() {
-    render({ resetCamera: true, sideralDay, sinodicDay })
+    state = { ...state, resetCamera: true }
+    render({ ...state })
   },
 
-  updateSideralAndSinodicDays(_sideralDay, _sinodicDay, _freeCamera) {
-    sideralDay = _sideralDay
-    sinodicDay = _sinodicDay
-    if (_freeCamera !== freeCamera) {
-      freeCamera = _freeCamera
+  updateSideralAndSinodicDays(sideralDay, sinodicDay, freeCamera) {
+    if (freeCamera !== state.freeCamera) {
+      state.freeCamera = freeCamera
     }
-    render({ sideralDay, sinodicDay, freeCamera })
+
+    state = {
+      ...state,
+      sideralDay,
+      sinodicDay,
+    }
+
+    render({ ...state })
   },
+
+  setControlsVisibility(controlsVisibility) {
+    state = { ...state, controlsVisibility }
+    render({ ...state })
+  }
 }
 
 App(controlsCallbackInterface)
 
-const AppControls = ({ sideralDay, freeCamera, sinodicDay, resetCamera = false }) => (
+const AppControls = ({ sideralDay, freeCamera, sinodicDay, resetCamera = false, controlsVisibility }) => (
   <>
     <Controls
+      visibility={controlsVisibility}
       sideralDay={sideralDay}
       sinodicDay={sinodicDay}
       customCameraPosition={freeCamera}
@@ -43,7 +67,11 @@ const AppControls = ({ sideralDay, freeCamera, sinodicDay, resetCamera = false }
       resetCamera={resetCamera}
       handleAnimationSpeed={(value) => handleAnimationSpeed(value)}
     />
-    <EclipsesControls />
+    <EclipsesControls
+      startTotalSolarEclipse={handleTotalSolarEclipse}
+      handleOnClose={handleCloseSimulation}
+      visibility={controlsVisibility}
+    />
   </>
 )
 
@@ -56,4 +84,4 @@ function render(props) {
   )
 }
 
-render({ sideralDay, sinodicDay, freeCamera })
+render({ ...state })

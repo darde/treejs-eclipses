@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import styled, { css } from 'styled-components'
 import SwitchControl from './SwitchControl'
@@ -20,19 +20,16 @@ const PanelContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   bottom: 0;
-  // left: -195px;
-  // background: rgba(34,141,255,0.3);
-  // border-top-right-radius: 4px;
-  // border-bottom-right-radius: 4px;
-  // box-shadow: 0 0 2px rgba(255,255,255,0.3), 0 0 5px rgba(255,255,255,0.3), 0 0 7px rgba(255,255,255,0.3), 0 0 5px rgba(34,141,255,0.3), 0 0 10px rgba(34,141,255,0.3), 0 0 15px rgba(34,141,255,0.3), 0 0 20px rgba(34,141,255,0.3), 0 0 25px rgba(34,141,255,0.3);
-  transition: left 0.3s ease;
+  right: 0;
+  transition: all 0.3s ease;
 
-  ${({ open }) => open && css`
-    // left: 0
+  ${({ visible }) => !visible && css`
+    right: -200px;
   `}
   `
 
 function Controls({
+  visibility,
   customCameraPosition,
   handleAnimationSpeed,
   sideralDay,
@@ -42,22 +39,21 @@ function Controls({
   toggleEcliptic,
   toggleMoonOrbit,
  }) {
-  const [open, setOpen] = useState(true)
 
   return ReactDOM.createPortal(
-    <PanelContainer open={open}>
+    <PanelContainer visible={visibility}>
       <MoonPhaseDisplay
         legend={'Fase da Lua'}
         sinodicDay={sinodicDay}
         sideralDay={sideralDay}
       />
       <ControlItem>
-        <CameraControls
-          legend={'Câmera'}
-          customCameraPosition={customCameraPosition}
-          handleFreeCamera={handleFreeCamera}
-          resetCamera={resetCamera}
-        />
+      <CameraControls
+        legend={'Câmera'}
+        customCameraPosition={customCameraPosition}
+        handleFreeCamera={handleFreeCamera}
+        resetCamera={resetCamera}
+      />
       </ControlItem>
       <Fieldset legend={'Animação'}>
         <ControlItem>

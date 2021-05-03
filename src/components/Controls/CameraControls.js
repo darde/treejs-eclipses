@@ -1,8 +1,6 @@
-import React, { useReducer, useEffect, useState } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import Fieldset from '../Fieldset'
-import GlassButton from './GlassButton'
-import LabelInfo from './LabelInfo'
 
 const CameraControlsContainer = styled.div`
   width: 40px;
