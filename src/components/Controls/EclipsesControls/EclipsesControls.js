@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import EclipseButton from './EclipseButton'
 import Fieldset from '../../Fieldset'
+import Screen from '../../Screen'
 
 const EclipsesControlsWrapper = styled.div`
   width: 100%;
@@ -20,7 +21,7 @@ const Box = styled.div`
 
 const StatusPanel = styled.div`
   position: fixed;
-  top: ${({ visibility }) => visibility ? 0 : '-65px'};
+  top: ${({ visible }) => visible ? 0 : '-65px'};
   width: 95%;
   height: 65px;
   padding-top: 15px;
@@ -55,6 +56,14 @@ const Message = styled.div`
   }
 `
 
+const LeftPanel = styled.div`
+  position: absolute;
+  left: ${({ visible }) => visible ? 0 : '-190px'};
+  width: 190px;
+  height: 400px;
+  transition: all 0.3s ease;
+`
+
 const EclipsesControls = ({ startTotalSolarEclipse, handleOnClose, visibility }) => {
   const [statusPanelLabel, setStatusPanelLabel] = useState('')
 
@@ -77,7 +86,8 @@ const EclipsesControls = ({ startTotalSolarEclipse, handleOnClose, visibility })
 
   return ReactDOM.createPortal(
     <EclipsesControlsWrapper>
-      <StatusPanel visibility={!visibility}>
+      <Screen visible={visibility} />
+      <StatusPanel visible={!visibility}>
         <Message>
           <label>Simulação Iniciada - {statusPanelLabel}</label>
         </Message>
@@ -87,26 +97,28 @@ const EclipsesControls = ({ startTotalSolarEclipse, handleOnClose, visibility })
           Encerrar Simulação
         </CloseSimulationButton>
       </StatusPanel>
-      <Fieldset>
-        <legend>Simular Eclipse</legend>
-        <Box>
-          <EclipseButton
-            label={'Eclipse Solar Total'}
-            type="total-solar"
-            handleOnClick={handleOnClick}
-          />
-          <EclipseButton
-            label={'Eclipse Solar Anular'}
-            type="anullar-solar"
-            handleOnClick={handleOnClick}
-          />
-          <EclipseButton
-            label={'Eclipse Lunar'}
-            type="moon"
-            handleOnClick={handleOnClick}
-          />
-        </Box>
-      </Fieldset>
+      <LeftPanel visible={visibility}>
+        <Fieldset>
+          <legend>Simular Eclipse</legend>
+          <Box>
+            <EclipseButton
+              label={'Eclipse Solar Total'}
+              type="total-solar"
+              handleOnClick={handleOnClick}
+            />
+            <EclipseButton
+              label={'Eclipse Solar Anular'}
+              type="anullar-solar"
+              handleOnClick={handleOnClick}
+            />
+            <EclipseButton
+              label={'Eclipse Lunar'}
+              type="moon"
+              handleOnClick={handleOnClick}
+            />
+          </Box>
+        </Fieldset>
+      </LeftPanel>
     </EclipsesControlsWrapper>,
     document.getElementById('left-panel')
   )

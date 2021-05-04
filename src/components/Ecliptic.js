@@ -16,9 +16,19 @@ function Ecliptic() {
     material.opacity = opacity > 0 ? 0 : 0.2
   }
 
+  function turnOn() {
+    material.opacity = 0.2
+  }
+
+  function turnOff() {
+    material.opacity = 0
+  }
+
   return {
     toggleEcliptic,
     system: plane,
+    turnOn,
+    turnOff,
   }
 }
 
