@@ -52,6 +52,14 @@ function EarthMoonSystem() {
     material.opacity = opacity > 0 ? 0 : 0.2
   }
 
+  function moonOrbitTurnOn() {
+    moonOrbit.material.opacity = 0.2
+  }
+
+  function moonOrbitTurnOff() {
+    moonOrbit.material.opacity = 0
+  }
+
   function rotateMoonOrbit(increment) {
     moonOrbitSystem.rotateOnAxis(new Vector3(0, 1, 0), degToRad(increment))
   }
@@ -65,10 +73,12 @@ function EarthMoonSystem() {
   }
 
   return {
-    system: moonOrbitSystem,
+    moonOrbit: moonOrbitSystem,
     animateMoon,
     animateEarth,
     toggleMoonOrbit,
+    moonOrbitTurnOn,
+    moonOrbitTurnOff,
     rotateMoonOrbit,
     getMoonPosition,
     getEarthPosition,

@@ -20,7 +20,7 @@ const Box = styled.div`
 
 const StatusPanel = styled.div`
   position: fixed;
-  top: ${({ visibility }) => visibility ? 0 : '-65px'};
+  top: ${({ visible }) => visible ? 0 : '-65px'};
   width: 95%;
   height: 65px;
   padding-top: 15px;
@@ -77,7 +77,7 @@ const EclipsesControls = ({ startTotalSolarEclipse, handleOnClose, visibility })
 
   return ReactDOM.createPortal(
     <EclipsesControlsWrapper>
-      <StatusPanel visibility={!visibility}>
+      <StatusPanel visible={!visibility}>
         <Message>
           <label>Simulação Iniciada - {statusPanelLabel}</label>
         </Message>

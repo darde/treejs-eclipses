@@ -1,9 +1,11 @@
 import * as THREE from 'three'
+import OrbitControls from 'three-orbitcontrols'
 import EarthMoonSystem from './components/EarthMoonSystem'
 import Sun from './components/Sun'
 import Skybox from './components/Skybox'
 import Ecliptic from './components/Ecliptic'
-import OrbitControls from 'three-orbitcontrols'
+import { degToRad } from './components/helpers'
+import { animateCamera }  from './utils'
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
@@ -27,6 +29,8 @@ let speedAnimation = 1
 let updateAnimationProperties
 let axesHelper
 let lookAtMoon = false
+let memory = []
+let simulationRunning = false
 
 function init() {
   const canvas = document.getElementById('canvas')
@@ -77,7 +81,45 @@ function handleOrbitControlStart() {
   updateAnimationProperties.resetCameraCallback()
 }
 
+/* SIMULATE TOTAL SOLAR ECLIPSE */
+function setupMoon(moonPositionAngle) {
+  EarthMoonSystem.animateMoon(moonPositionAngle)
+  EarthMoonSystem
+    .moonOrbit
+    .lookAt(-10,0,0)
+
+  EarthMoonSystem.moonOrbitTurnOn()
+  Ecliptic.turnOn()
+
+  function animate() {
+    console.log('Angle: ', moonPositionAngle)
+    if (moonPositionAngle <= 90) {
+      window.requestAnimationFrame(animate)
+    }
+
+    EarthMoonSystem.animateMoon(moonPositionAngle)
+    moonTranslationAngle = Number(moonTranslationAngle + (moontTranslationIncrement * speedAnimation))
+    
+    moonPositionAngle += 0.1
+  }
+
+  animate()
+}
+
+function simulateTotalSolarEclipse() {
+  simulationRunning = true
+  // camera.position.set(-3, 2, 4)
+  camera.position.set(-6, 1, 1.5)
+  
+  camera.lookAt(0, 0, 0)
+  setupMoon(80)
+}
+
 function animateEarthMoonSystem() {
+  if (simulationRunning) {
+    return
+  }
+
   const { updateSideralAndSinodicDays } = updateAnimationProperties
 
   if (earthRotationAngle > 359) {
@@ -105,7 +147,6 @@ function animateEarthMoonSystem() {
   
   EarthMoonSystem.animateMoon(moonTranslationAngle)
   EarthMoonSystem.animateEarth(earthRotationAngle)
-  // EarthMoonSystem.rotateMoonOrbit(moonOrbitAngle)
 }
 
 function animateSun() {
@@ -174,7 +215,9 @@ function onWindowResize() {
 }
 
 function pauseOrbitControls() {
-  controls.enabled = false
+  // controls.enabled = false
+  memory.push({ speedAnimation })
+  handleAnimationSpeed(0)
   updateAnimationProperties.setControlsVisibility(false)
 }
 
@@ -199,12 +242,18 @@ export const toggleEcliptic = () => {
 }
 
 export const handleTotalSolarEclipse = () => {
-  pauseOrbitControls();
-  console.log('handle total eclipse')
+  pauseOrbitControls()
+  simulateTotalSolarEclipse()
+  
 }
 
 export function closeSimulation() {
+  const { speedAnimation: speed } = memory.find(item => item.speedAnimation)
+  handleAnimationSpeed(speed)
   controls.enabled = true
+  EarthMoonSystem.moonOrbitTurnOff()
+  Ecliptic.turnOff()
+  simulationRunning = false
 }
 
 function App(updatePropertiesCallback) {
@@ -214,64 +263,10 @@ function App(updatePropertiesCallback) {
   animate()
 
   scene.add(Skybox)
-  scene.add(EarthMoonSystem.system)
+  scene.add(EarthMoonSystem.moonOrbit)
   scene.add(Ecliptic.system)
   scene.add(Sun.entity)
   scene.add(axesHelper)
 }
-
-// const light = new PointLight(0xFFFFFF, 1, 500)
-// light.position.set(10,0,25)
-// scene.add(light)
-
-// function App({ screenWidth, screenHeight }) {
-
-//   document.body.appendChild(renderer.domElement)
-  
-  // const earthRotation = [0, 0, 0]
-  // const earth = Earth()
-
-  // const moon = Moon()
-  // moon.position.set(3,0,0)
-  // const moonAxis = new THREE.Vector3(0, 0, 0).normalize()
-  // const groupMoon = new Group()
-  // groupMoon.rotateOnAxis(moonAxis, degToRad(0))
-  // groupMoon.add(moon)
-  
-  // const groupEarth = new Group()
-  // const earthAxis = new THREE.Vector3(0, 0, degToRad(-23.44)).normalize()
-  // // groupEarth.rotateOnAxis(earthAxis, degToRad(23.44))
-  // groupEarth.add(earth)
-  
-
-  // const systemEarthMoon = new Group()
-  // const systemEarthMoonAxis = new THREE.Vector3(0,0,0)
-  // systemEarthMoon.rotateOnAxis(systemEarthMoonAxis, degToRad(0))
-  // systemEarthMoon.add(groupMoon)
-  // systemEarthMoon.add(groupEarth)
-  // scene.add(systemEarthMoon)
-
-  // function render() {
-  //   requestAnimationFrame(render)
-  //   renderer.setSize(screenWidth, screenHeight)
-  //   camera.aspect = screenWidth / screenHeight
-  //   camera.updateProjectionMatrix()
-
-
-    
-  //   // earthRotation[1] = earthRotation[1] -= 0.01
-  //   // earth.rotation.y = earthRotation[1]
-
-  //   // systemEarthMoon.rotation.y += 0.005
-    
-  //   renderer.render(scene, camera)
-  // }
-  
-  // render()
-  
-  
-
-//   return true
-// }
 
 export default App
